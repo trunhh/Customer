@@ -1,0 +1,5 @@
+export const APIC_spCustomerSenderAddressList = 'APIC_spCustomerSenderAddressList'
+
+export const API_spCustomerSenderAddressList_Detail = 'API_spCustomerSenderAddressList_Detail'
+
+export const APIC_spCustomerSenderAddress_Save = 'APIC_spCustomerSenderAddress_Save'
