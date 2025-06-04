@@ -13,3 +13,5 @@ export const API_spCallServerNoSQL = 'API_spCallServerNoSQL'
 
 export const EncryptString = 'EncryptString'
 export const DecryptString = 'DecryptString'
+
+export const Login = 'Login';
