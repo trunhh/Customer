@@ -36,6 +36,17 @@ export function LOADING(params, dispatch) {
     })
 }
 
+export function API_Login(params, dispatch) {
+    return new Promise((resolve, reject) => {
+      dispatch({
+        type: mainTypes.Login,
+        params,
+        resolve,
+        reject,
+      });
+    });
+  }
+
 export function API_spCallServer(params, dispatch) {
     return new Promise((resolve, reject) => {
         dispatch({

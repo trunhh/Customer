@@ -1,6 +1,6 @@
 import { put, takeEvery, take, cancel, delay, takeLatest } from 'redux-saga/effects';
 import { mainTypes } from "../Actions";
-import { APIKey, API_END_POINT, TOKEN_DEVICE, api } from "../../Services/Api";
+import { APIKey, API_END_POINT, TOKEN_DEVICE, api, setToken } from "../../Services/Api";
 import { EN, VN, LANE } from '../../Enum';
 import { getData } from '../../Utils/Storage';
 import I18n from '../../Language'
@@ -20,6 +20,11 @@ export function* API_spCallServer(action) {
     try {
         //show loading
         yield put({ type: mainTypes.LOADING_SUCCESS, payload: true });
+
+        //set token
+        const token = localStorage.getItem('token');
+        setToken(token);
+
         //params received
         const params = action && action.params
         params.API_key = APIKey;
@@ -72,6 +77,11 @@ export function* API_spCallServer(action) {
             respone.data === "" ? action.resolve([]) : action.resolve(JSON.parse(respone.data))
             yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
         }
+        else if (respone && respone.status === 401) {
+            // api call fail
+            action.reject(respone);
+            yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
+        } 
         else {
             // api call fail
             action.reject(respone)
@@ -81,10 +91,55 @@ export function* API_spCallServer(action) {
     }
     catch (e) {
         ///something wrong
-        yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
-        action.reject(e)
+        if (e.response && e.response.status === 401) {
+            // Xử lý token hết hạn
+            const login = localStorage.getItem('login');
+            if (login !== '') {
+              localStorage.setItem('token', '');
+              localStorage.setItem('CustomerID', '');
+              localStorage.setItem('GroupInfo', '');
+              localStorage.setItem('login', '');
+              alert('Vui lòng đăng nhập lại!');
+              window.location = '/';
+            }
+            yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
+        } else {
+            yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
+            action.reject(e);
+        }
     }
 }
+
+export function* API_Login(action) {
+    try {
+      //show loading
+      yield put({ type: mainTypes.LOADING_SUCCESS, payload: true });
+      //params received
+      const params = action && action.params
+      params.API_key = APIKey;
+      params.TokenDevices = TOKEN_DEVICE;
+      /// catch api die
+      yield delay(300);
+      // call api
+      let respone = yield api.post(API_END_POINT + "/API_Customer_Login/", params)
+      // check call api success
+      if (respone && respone.status === 200) {
+        respone.data === "" ? action.resolve([]) : action.resolve(JSON.parse(respone.data.data))
+        localStorage.setItem('token', respone.data.token);
+        yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
+      } else {
+        // api call fail
+        action.reject(respone);
+        yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
+      }
+      yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
+    } catch (e) {
+      ///something wrong
+      yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
+      action.reject(e);
+    }
+  }
+
 export function* API_spCallServerNoSQL(action) {
     try {
         const params = action && action.params
@@ -214,5 +269,6 @@ export default function* watchMainActionSagas() {
     yield takeEvery(mainTypes.EncryptString, EncryptString);
     yield takeEvery(mainTypes.DecryptString, DecryptString);
     yield takeEvery(mainTypes.API_spCallServer, API_spCallServer);
+    yield takeEvery(mainTypes.Login, API_Login);
     yield takeEvery(mainTypes.API_spCallServerNoSQL, API_spCallServerNoSQL);
 }

@@ -71,7 +71,7 @@ export const LoginV1Component = () => {
         func: "APIC_spCustomerCheckLoginGroup",
       };
       console.log(pr)
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+      const data = await mainAction.API_Login(pr, dispatch);
       let group = new Object();
       
       if (data.CustomerGroup.length > 0) {
