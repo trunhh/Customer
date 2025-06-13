@@ -1,6 +1,7 @@
 import Axios from "axios";
 
-const API_DOMAIN = "https://api.gtelpost.vn";
+// const API_DOMAIN = "https://api.gtelpost.vn";
+const API_DOMAIN = "http://localhost:62648";
 
 const VERSION_END_POINT = "/api/ApiMain";
 
