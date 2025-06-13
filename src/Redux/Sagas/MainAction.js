@@ -123,13 +123,16 @@ export function* API_Login(action) {
       // call api
       let respone = yield api.post(API_END_POINT + "/API_Customer_Login/", params)
       // check call api success
+    //   if (respone && respone.status === 200) {
       if (respone && respone.status === 200) {
-        respone.data === "" ? action.resolve([]) : action.resolve(JSON.parse(respone.data.data))
+        console.log(respone.data);
+        respone.data.Status === 'False' ? action.resolve([]) : action.resolve(JSON.parse(respone.data.data))
         localStorage.setItem('token', respone.data.token);
         yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
+        
       } else {
         // api call fail
-        action.reject(respone);
+        action.reject(respone.data);
         yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
       }
       yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });

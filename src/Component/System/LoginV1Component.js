@@ -70,11 +70,9 @@ export const LoginV1Component = () => {
         Json: '{"UserName":"' + Username + '","Password":"' + pwd + '"}',
         func: "APIC_spCustomerCheckLoginGroup",
       };
-      console.log(pr)
       const data = await mainAction.API_Login(pr, dispatch);
       let group = new Object();
-      
-      if (data.CustomerGroup.length > 0) {
+      if (data.CustomerGroup && data.CustomerGroup.length > 0) {
         group.GroupId = data.CustomerGroup[0].Id;
         group.IsChooseCustomer = "Fail";
         group.Customers = data.Customers;
@@ -97,7 +95,7 @@ export const LoginV1Component = () => {
         let enscC = EncodeString(JSON.stringify(data.Customers[0]));
         localStorage.setItem("login", enscC);
         window.location.href = "/home";
-      } else if (data.Customers.length === 1) {
+      } else if (data.CustomerGroup &&  data.Customers.length === 1) {
         group.GroupId = 0;
         group.IsChooseCustomer = "True";
         group.Customers = [];
