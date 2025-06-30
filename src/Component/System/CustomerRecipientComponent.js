@@ -93,12 +93,12 @@ export const CustomerRecipientComponent = () => {
     setWardMeno(item.label);
 
     //Gọi api nạp danh sách địa chỉ cho khách lựa chọn
-    const params = {
-      Json: "[{\"WardId\":\"" + item.value + "\"}]",
-      func: "APIC_spCustomerRecipientGetByLocation",
-    };
     // call redux saga
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "APIC_spCustomerRecipientGetByLocation",
+      [{ WardId: item.value }],
+      dispatch
+    );
     setStreetList(result);
   };
 
@@ -125,12 +125,11 @@ export const CustomerRecipientComponent = () => {
   /* clear data on form when insert success */
 
   const APIC_spCustomerRecipientLoad = async () => {
-    const params = {
-      Json: '{"CustomerId":' + CustomerID + "}",
-      func: "APIC_spCustomerRecipientLoad",
-    };
-    // call redux saga
-    const data = await mainAction.API_spCallServer(params, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerRecipientLoad",
+      { CustomerId: CustomerID },
+      dispatch
+    );
     if (data !== null) setNoResultMessage("");
     else setNoResultMessage("Không tìm thấy dữ liệu");
     setAddressList(data);

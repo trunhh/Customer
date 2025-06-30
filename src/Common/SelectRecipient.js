@@ -69,13 +69,11 @@ const SelectRecipientComp = React.forwardRef(({
   }, [onLoad]);
 
   const onGetData = async () => {
-    const params = {
-      Json: '{"CustomerId":' + CustomerID + '}',
-      func: "APIC_spCustomerRecipientLoad",
-    };
-
-    // call redux saga
-    const list = await mainAction.API_spCallServer(params, dispatch);
+    const list = await mainAction.API_spCallServer(
+      "APIC_spCustomerRecipientLoad",
+      { CustomerId: CustomerID },
+      dispatch
+    );
     let dataOptions = [], IsActive = 0;
     dataOptions.push(_default);
     if (onActive === 0) setValueS(_default);

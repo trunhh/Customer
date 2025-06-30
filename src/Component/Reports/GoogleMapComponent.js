@@ -87,11 +87,11 @@ export const GoogleMapComponent = ({ data = [] }) => {
   const [VehicleRent, setVehicleRent] = useState([]);
   const APIC_spVehicle_List = async (row) => {
     try {
-      const params = {
-        Json: "{}",
-        func: "APIC_spVehicle_List"
-      }
-      const res = await mainAction.API_spCallServer(params, dispatch);
+      const res = await mainAction.API_spCallServer(
+        "APIC_spVehicle_List",
+        null,
+        dispatch
+      );
       setVehicleRent(res);
     } catch (error) {
       Alertwarning("Đã có lỗi xảy ra, vui lòng liên hệ IT NETCO")

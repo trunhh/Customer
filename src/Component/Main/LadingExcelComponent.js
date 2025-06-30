@@ -258,12 +258,12 @@ export const LadingExcelComponent = () => {
 
   const [TotalBill, setTotalBill] = useState(0);
   const CPN_spLading_Upload_Excel = async (LadingList, ListProduct) => {
-    const params = {
-      json: JSON.stringify({ ListBill: LadingList, Products: ListProduct }),
-      func: "CPN_spLading_Upload_Excel",
-    };
     debugger;
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+        "CPN_spLading_Upload_Excel",
+        { ListBill: LadingList, Products: ListProduct },
+        dispatch
+    );
     debugger;
     setTotalBill(result.length);
     setLadingList(JSON.parse(result[0].ListBill));

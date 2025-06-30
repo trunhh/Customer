@@ -73,12 +73,11 @@ export const PaymentReportComponent = () => {
       Year: parseInt(time[0])
     };
     debugger
-    let pr = {
-      Json: JSON.stringify(params),
-      func: "APIC_spPaymentReportJson",
-      TokenDevices: TOKEN_DEVICE,
-    };
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spPaymentReportJson",
+      params,
+      dispatch
+    );
     setReportData(data);
     if (data.length === 0) setNoData("");
     else setNoData("display-none");
@@ -91,15 +90,13 @@ export const PaymentReportComponent = () => {
   const FRM_spPaymentRevenue_GetInvoice = async (code) => {
     try {
       setCode_Payment(code)
-      const params = {
-        Json: JSON.stringify({
-          BkpaymentCode: code
-        }),
-        func: "FRM_spPaymentRevenue_GetInvoice",
-      }
       debugger
       mainAction.LOADING({ IsLoading: true }, dispatch);
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "FRM_spPaymentRevenue_GetInvoice",
+        { BkpaymentCode: code },
+        dispatch
+      );
       if (result.length != 0) {
         setDataGetInvoice(result)
         setDataGetInvoiceCheck(false)

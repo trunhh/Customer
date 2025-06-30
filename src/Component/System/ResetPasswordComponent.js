@@ -54,11 +54,11 @@ export const ResetPasswordComponent = () => {
     const keyDesc = await mainAction.DecryptString(pr, dispatch);
     if (keyDesc !== "") {
       var arr = keyDesc.split(";");
-      let params = {
-        Json: '{"CustomerID":"' + arr[0] + '"}',
-        func: "APIC_spCustomer_GetById",
-      };
-      const data = await mainAction.API_spCallServer(params, dispatch);
+      const data = await mainAction.API_spCallServer(
+        "APIC_spCustomer_GetById",
+        '{"CustomerID":"' + arr[0] + '"}',
+        dispatch
+      );
       if (data[0].CustomerCode == arr[1] && data[0].Password == arr[2]) {
         setCustomerID(arr[0]);
         setPassOld(arr[2]);

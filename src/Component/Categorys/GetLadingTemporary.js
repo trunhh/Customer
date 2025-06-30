@@ -27,14 +27,14 @@ export const GetLadingTemporary = () => {
 
   const _Init = async () => {
     setDisable(false);
-    let params = {
-      Json: '{"CustomerId":' + CustomerID + "}",
-      func: "APIC_spLadingTemporaryReport",
-    };
-
+    
     try {
       //const data = await LadingTemporaryAction.CTM_spGetLadingTemporary(params, dispatch);
-      const data = await mainAction.API_spCallServer(params, dispatch);
+      const data = await mainAction.API_spCallServer(
+        "APIC_spLadingTemporaryReport",
+        { CustomerId: CustomerID },
+        dispatch
+      );
       setLadingTemporarylist(data);
       PaginationTable2();
     } catch (err) {
@@ -53,13 +53,13 @@ export const GetLadingTemporary = () => {
   const [hiddenTable, setHiddenTable] = useState(true);
 
   const APIC_spLadingTemporaryDetail = async (item) => {
-    let params = {
-      Json: '{"CustomerId":' + CustomerID + "}",
-      func: "APIC_spLadingTemporaryDetail",
-    };
     debugger;
     try {
-      const data = await mainAction.API_spCallServer(params, dispatch);
+      const data = await mainAction.API_spCallServer(
+        "APIC_spLadingTemporaryDetail",
+        { CustomerId: CustomerID },
+        dispatch
+      );
       setLadingDetailTemporarylist(data);
       PaginationTable2();
     } catch (err) {

@@ -64,11 +64,11 @@ export const LoginComponent = () => {
         json: Password,
       };
       const pwd = await mainAction.EncryptString(prj, dispatch);
-      let pr = {
-        Json: '{"UserName":"' + Username + '","Password":"' + pwd + '"}',
-        func: "APIC_spCustomerCheckLogin_Json",
-      };
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+      const data = await mainAction.API_spCallServer(
+        "APIC_spCustomerCheckLogin_Json",
+        '{"UserName":"' + Username + '","Password":"' + pwd + '"}',
+        dispatch
+      );
       if (data.length > 0) {
         let ensc = EncodeString(JSON.stringify(data[0]));
         localStorage.setItem("login", ensc);

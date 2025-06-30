@@ -99,8 +99,10 @@ const _FormManagerAddress = ({
     // Save 
     const CPN_spManagerAddress_Save = async (_lat, _lng) => {
         try {
-            const params = {
-                Json: JSON.stringify({
+            setCode('K-' + CodeAddress);
+            const result = await mainAction.API_spCallServer(
+                "CPN_spManagerAddress_Save",
+                {
                     Id: Id,
                     CodeAddress: 'K-' + CodeAddress,
                     NameAddress: NameAddress,
@@ -124,12 +126,9 @@ const _FormManagerAddress = ({
                     TonTimeDown: 30,
                     CustomerId: GetCookie("CustomerID"),
                     CustomerRecipientId: CustomerRecipientId
-                }),
-                func: "CPN_spManagerAddress_Save"
-            }
-
-            setCode('K-' + CodeAddress);
-            const result = await mainAction.API_spCallServer(params, dispatch);
+                },
+                dispatch
+            );
 
             if (result.Status === "OK") {
                 Alertsuccess(result.ReturnMess);
@@ -418,13 +417,12 @@ const _FormManagerAddress = ({
             CreateId: 0
         }
 
-        const params = {
-            Json: JSON.stringify(pr),
-            func: "CPN_spManagerAddress_Like"
-        }
-
         try {
-            const result = await mainAction.API_spCallServer(params, dispatch);
+            const result = await mainAction.API_spCallServer(
+                "CPN_spManagerAddress_Like",
+                pr,
+                dispatch
+            );
             if (result.length > 0) {
                 setListDataaddress(result)
             } else {

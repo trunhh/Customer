@@ -396,13 +396,12 @@ export const LadingCreateComponent = () => {
   //#region HÀM XÓA VẬN ĐƠN
 
   const CPN_spLading_Delete_All = async (item) => {
-    const params = {
-      AppAPIKey: APIKey,
-      json: "[{\"Id\":" + item._original.Id + ",\"IsDelete\":1}]",
-      func: "CPN_spLading_Delete_All",
-    };
     try {
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "CPN_spLading_Delete_All",
+        [{Id: item._original.Id, IsDelete:1}],
+        dispatch
+      );
       setdataLading(dataLading.filter((p) => p.Id !== item._original.Id));
       Alertsuccess(result.ReturnMess);
       //APIC_spLadingGetMany();
@@ -1239,12 +1238,12 @@ export const LadingCreateComponent = () => {
       CityToName
     );
     //Gọi api nạp danh sách địa chỉ cho khách lựa chọn
-    const params = {
-      Json: "[{\"WardId\":\"" + item.value + "\"}]",
-      func: "APIC_spCustomerRecipientGetByLocation",
-    };
     // call redux saga
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "APIC_spCustomerRecipientGetByLocation",
+      [{WardId: item.value }],
+      dispatch
+    );
     setStreetList(result);
   };
 
@@ -1674,12 +1673,11 @@ export const LadingCreateComponent = () => {
   const APIC_spLadingEdit = async (row) => {
     try {
       //Lấy thông tin vận đơn
-      let pr = {
-        Json: "{\"LadingId\":" + row._original.Id + ",\"CustomerID\":" + Customer?.CustomerID + "}",
-        func: "APIC_spLading_Find",
-        TokenDevices: TOKEN_DEVICE,
-      };
-      const result = await mainAction.API_spCallServer(pr, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "APIC_spLading_Find",
+        {LadingId:row._original.Id, CustomerID:Customer?.CustomerID},
+        dispatch
+      );
       let data = result.Detail[0];
       setshowingdetail(true); // open detail view
       setdisablerecipient();
@@ -1915,12 +1913,12 @@ export const LadingCreateComponent = () => {
       IsAPI: 1,
     };
     try {
-      const params = {
-        Json: JSON.stringify(pr),
-        func: "CPN_spLading_PriceMain",
-      };
       // call redux saga
-      const data = await mainAction.API_spCallServer(params, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "CPN_spLading_PriceMain",
+          pr,
+          dispatch
+      );
       //let pricemain = data.length === 0 ? 18000 : parseInt(data);
       // let PriceNT = pricemain * OnSiteDeliveryPrice / 100;
       //  await setOutlineSave({ OnSiteDeliveryPrice: OnSiteDeliveryPrice, OnSiteDeliveryPriceMoney: PriceNT });

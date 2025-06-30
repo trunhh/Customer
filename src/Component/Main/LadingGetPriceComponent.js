@@ -134,14 +134,13 @@ export const LadingGetPriceComponent = () => {
       Weight: parseFloat(Weight),
       PostOffice_Id: GetCookie("PostOfficeId"),
     };
-    const params = {
-      TokenDevices: TOKEN_DEVICE,
-      Json: JSON.stringify(pr),
-      func: "CPN_spLading_EstimatesPrice",
-    };
     try {
       // call redux saga
-      const data = await mainAction.API_spCallServer(params, dispatch);
+      const data = await mainAction.API_spCallServer(
+        "CPN_spLading_EstimatesPrice",
+        pr,
+        dispatch
+      );
       //const data = await Lading.APIC_spLadingGetPriceMany(params, dispatch);
       setPrices(data);
       //ClearForm();

@@ -81,12 +81,11 @@ export const PaymentCODCustomerComponent = () => {
       Todate: ToDate.toISOString(),
       Status: -1
     };
-    let pr = {
-      Json: JSON.stringify(params),
-      func: "CPN_spPayment_COD_Customer_Report",
-      TokenDevices: TOKEN_DEVICE,
-    };
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "CPN_spPayment_COD_Customer_Report",
+      params,
+      dispatch
+    );
     setReportData(data);
     if (data.length === 0) setNoData("");
     else setNoData("display-none");

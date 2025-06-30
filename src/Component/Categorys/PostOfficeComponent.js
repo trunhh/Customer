@@ -51,11 +51,11 @@ export const PostOfficeComponent = () => {
   const _Init = async () => {
     try {
       debugger;
-      let pr = {
-        Json: "",
-        func: "APIC_spPostOffice_GetMany",
-      };
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+      const data = await mainAction.API_spCallServer(
+        "APIC_spPostOffice_GetMany",
+        "",
+        dispatch
+      );
       setData(
         data.filter(
           (p) =>

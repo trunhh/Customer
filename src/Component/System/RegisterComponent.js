@@ -274,16 +274,15 @@ export const RegisterComponent = () => {
     obj.Name = response.profileObj.familyName + response.profileObj.givenName;
     obj.googleId = response.profileObj.googleId;
     obj.imageUrl = response.profileObj.imageUrl;
-    const params = {
-      Json:
-        '{"SocialID":"' +
+    const list = await mainAction.API_spCallServer(
+      "APIC_spCustomerSocialLoginV2",
+      '{"SocialID":"' +
         response.profileObj.googleId +
         '","SocialType":"Google", "SocialLoginObj": "' +
         JSON.stringify(response) +
         '"}',
-      func: "APIC_spCustomerSocialLoginV2",
-    };
-    const list = await mainAction.API_spCallServer(params, dispatch);
+      dispatch
+    );
   };
 
   return (

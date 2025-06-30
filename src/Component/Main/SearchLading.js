@@ -203,12 +203,12 @@ export const SearchLading = () => {
 
   //#region HÀM XÓA VẬN ĐƠN
   const CPN_spLading_Delete_All = async (item) => {
-    const params = {
-      json: '[{"Id":' + item._original.Id + ',"IsDelete":1}]',
-      func: "CPN_spLading_Delete_All",
-    };
     try {
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "CPN_spLading_Delete_All",
+        [{Id:item._original.Id,IsDelete:1}],
+        dispatch
+      );
       setdataLading(dataLading.filter((p) => p.Id !== item._original.Id));
       Alertsuccess(result.ReturnMess);
     } catch (err) {

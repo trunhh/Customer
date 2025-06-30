@@ -79,12 +79,12 @@ const SelectSenderComp = React.forwardRef(({
 
   const onGetCustomerSenderAddress = async () => {
     //let arr = DecodeString(cookies.customerLogin).split("|");
-    const params = {
-      Json: '{"CustomerId":' + Customer?.CustomerID + '}',
-      func: "APIC_spCustomerSenderAddressList",
-    };
     // call redux saga
-    const list = await mainAction.API_spCallServer(params, dispatch);
+    const list = await mainAction.API_spCallServer(
+      "APIC_spCustomerSenderAddressList",
+      { CustomerId: Customer?.CustomerID },
+      dispatch
+    );
     let dataOptions = [], IsActive = 0;
     dataOptions.push(_default);
     if (onActive === 0) setValueS(_default);

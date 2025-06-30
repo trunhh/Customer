@@ -160,12 +160,11 @@ export const WareHouseSupplierReportComponent = () => {
       SupplierId: Supplier.value
     };
 
-    let prList = {
-      Json: JSON.stringify(params),
-      func: "WH_spWareHouse_InventorySupplier_Report",
-    };
-    debugger
-    const data = await mainAction.API_spCallServer(prList, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "WH_spWareHouse_InventorySupplier_Report",
+      params,
+      dispatch
+    );
     debugger
     setReportData(data);
     setReportDataDetailImport([]);
@@ -189,12 +188,12 @@ export const WareHouseSupplierReportComponent = () => {
       SupplierId: item.Id
     };
 
-    let prList = {
-      Json: JSON.stringify(params),
-      func: "WH_spWareHouse_ImportSupplierDetail_Report",
-    };
     debugger
-    const data = await mainAction.API_spCallServer(prList, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "WH_spWareHouse_ImportSupplierDetail_Report",
+      params,
+      dispatch
+    );
     debugger
     setReportDataDetailImport(data);
     setViewDetailImport("");
@@ -291,12 +290,12 @@ export const WareHouseSupplierReportComponent = () => {
       SupplierId: item.Id
     };
 
-    let prList = {
-      Json: JSON.stringify(params),
-      func: "WH_spWareHouse_OutputSupplierDetail_Report",
-    };
     debugger
-    const data = await mainAction.API_spCallServer(prList, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "WH_spWareHouse_OutputSupplierDetail_Report",
+      params,
+      dispatch
+    );
     debugger
     setReportDataDetailOutput(data);
     setViewDetailOutput("");

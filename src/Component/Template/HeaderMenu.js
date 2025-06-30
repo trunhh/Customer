@@ -42,12 +42,13 @@ export const HeaderMenu = () => {
 
   const APIC_spCustomerGetByGroup = async (group) => {
     if (group !== 0) {
-      /* let pr = {
-        Json: "{\"GroupId\":" + group + "}",
-        func: "APIC_spCustomerGetByGroupJson",
-        TokenDevices: TOKEN_DEVICE,
-      };
-      const data = await mainAction.API_spCallServer(pr, dispatch); */
+      /* 
+      const data = await mainAction.API_spCallServer(
+        "APIC_spCustomerGetByGroupJson",
+        { GroupId: group },
+        dispatch
+      );
+      */
       setCustomers(GetCookieGroup("Customers"));
     }
   };

@@ -85,14 +85,12 @@ export const WareHousePersoninChargeReportComponent = () => {
     });
     setWareHouseList(_wareHouseList);
 
-    let prList = {
-      Json: JSON.stringify({
-        Id: 0, CreateId: 0
-      }),
-      func: "WH_spPersoninCharge_List",
-    };
     debugger
-    const dataSupplier = await mainAction.API_spCallServer(prList, dispatch);
+    const dataSupplier = await mainAction.API_spCallServer(
+      "WH_spPersoninCharge_List",
+      JSON.stringify({ Id: 0, CreateId: 0 }),
+      dispatch
+    );
     let _supplierList = [{ value: 0, label: "Chọn NPT" }];
     setSupplier({ value: 0, label: "Chọn NPT" });
     debugger
