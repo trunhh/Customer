@@ -3,7 +3,7 @@ import Axios from "axios";
 // const API_DOMAIN = "https://api.gtelpost.vn";
 const API_DOMAIN = "http://localhost:62648";
 
-const VERSION_END_POINT = "/api/ApiMain";
+const VERSION_END_POINT = "/api/Main";
 
 export const GOOGLE_LOGIN_CLIENTID =
   "418580183625-h3psg5ke3ri923qg5kuos64jmr0j2fuj.apps.googleusercontent.com";
@@ -21,6 +21,7 @@ export const api = Axios.create({
   baseURL: API_END_POINT,
   headers: {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "http://localhost:3000/",
     allowedHeaders: ["Content-Type", "Authorization"],
   },
 });

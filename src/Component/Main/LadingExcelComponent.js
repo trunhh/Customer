@@ -224,7 +224,7 @@ export const LadingExcelComponent = () => {
           Alertwarning("File không có dữ liệu !");
           return;
         } else {
-          CPN_spLading_CreateCode(ListArr, ListProduct);
+          CPN_spLading_CreateCode_V3(ListArr, ListProduct);
           console.log("check nha", ListArr, ListProduct);
         }
       };
@@ -236,16 +236,16 @@ export const LadingExcelComponent = () => {
     }
   };
 
-  const CPN_spLading_CreateCode = async (LadingList, ListProduct) => {
+  const CPN_spLading_CreateCode_V3 = async (LadingList, ListProduct) => {
     const result = await mainAction.API_spCallServer(
-        "CPN_spLading_CreateCode",
+        "CPN_spLading_CreateCode_V3",
         { ListBill: LadingList, Products: ListProduct },
         dispatch
     );
     if (result[0].ListJsonOke === "{}") {
       setDisable(true);
     } else {
-      CPN_spLading_Upload_Excel(
+      CPN_spLading_Upload_Excel_V3(
         JSON.parse(result[0].ListJsonOke),
         JSON.parse(result[0].Products)
       );
@@ -257,10 +257,10 @@ export const LadingExcelComponent = () => {
   };
 
   const [TotalBill, setTotalBill] = useState(0);
-  const CPN_spLading_Upload_Excel = async (LadingList, ListProduct) => {
+  const CPN_spLading_Upload_Excel_V3 = async (LadingList, ListProduct) => {
     debugger;
     const result = await mainAction.API_spCallServer(
-        "CPN_spLading_Upload_Excel",
+        "CPN_spLading_Upload_Excel_V3",
         { ListBill: LadingList, Products: ListProduct },
         dispatch
     );
@@ -287,12 +287,13 @@ export const LadingExcelComponent = () => {
   };
 
   //#region Lưu vân đơn
-  const CPN_spLading_Save = async () => {
-    const result = await mainAction.API_spCallServer(
-      "CPN_spLading_Save",
-      { ListBill: LadingList, Products: [] },
-      dispatch
-    );
+  const CPN_spLading_Save_V3 = async () => {
+    try {
+      const result = await mainAction.API_spCallServer(
+        "CPN_spLading_Save_V3",
+        { ListBill: LadingList, Products: [] },
+        dispatch
+      );
       setDisable(false); // disable button
       Alertsuccess(result.Status);
       setShowList("display-none");
@@ -301,8 +302,9 @@ export const LadingExcelComponent = () => {
       setShowListFile("display-none");
 
       //Gọi send notify
-      const NotifiParam = {
-        Json: JSON.stringify({
+      const resultNotify = await mainAction.API_spCallServer(
+        "APIC_spSendNotification",
+        {
           CustomerId: parseInt(CustomerID),
           FuncSend: "LadingCreate",
           SendFrom: "WEB CUSTOMER EXCEL",
@@ -311,11 +313,7 @@ export const LadingExcelComponent = () => {
               TotalLading: LadingList.length,
             },
           ],
-        }),
-        func: "APIC_spSendNotification",
-      };
-      const resultNotify = await mainAction.API_spCallServer(
-        NotifiParam,
+        },
         dispatch
       );
     } catch (err) {
@@ -576,7 +574,7 @@ export const LadingExcelComponent = () => {
                     type="button"
                     className="btn btn-save text-transform btn-sm margin-left-10 pull-right btn-sm"
                     disabled={!disable}
-                    onClick={CPN_spLading_Save}
+                    onClick={CPN_spLading_Save_V3}
                   >
                     <i className="material-icons">check</i> Tạo đơn
                   </button>

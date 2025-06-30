@@ -1497,7 +1497,7 @@ export const LadingCreateComponent = () => {
         });
       }
     const result = await mainAction.API_spCallServer(
-      "CPN_spLading_Save",
+      "CPN_spLading_Save_V3",
       {
           ListBill: [{
             // TokenDevices:TOKEN_DEVICE,

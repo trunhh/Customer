@@ -25,52 +25,11 @@ export function* API_spCallServer(action) {
         const token = localStorage.getItem('token');
         setToken(token);
 
-        //params received
-        const params = action && action.params
-        params.API_key = APIKey;
-        params.TokenDevices = TOKEN_DEVICE;
         /// catch api die
         yield delay(300);
-        //Check select data redis
-        switch (params.func) {
-            case "CPN_spLocationCheckCustomer":
-                params.func = "CPN_spLocationCheckCustomer"
-                break;
 
-            case "CPN_spLading_PriceMain":
-                params.func = "CPN_spLading_PriceMain"
-                break;
-
-            case "CPN_spLadingGetAnotherServiceMoney":
-                params.func = "CPN_spLadingGetAnotherServiceMoney"
-                break;
-
-            case "CPN_spLading_Save":
-                params.func = "CPN_spLading_Save_V3"
-                break;
-
-            case "CPN_spLading_CreateCode":
-                params.func = "CPN_spLading_CreateCode_V3"
-                break;
-
-            case "CPN_spLading_Upload_Excel":
-                params.func = "CPN_spLading_Upload_Excel_V3"
-                break;
-
-            case "CPN_spLocation_GET":
-                params.func = "CPN_spLocation_GET"
-                break;
-
-            case "WH_spWareHouse_Area_List_V1":
-                params.func = "WH_spWareHouse_Area_List_V1"
-                break;
-
-            default:
-                break;
-        }
-        //End check select data redis
         // call api
-        let respone = yield api.post(API_END_POINT + "/API_spCallServer/", params)
+        let respone = yield api.post(API_END_POINT + '/API_spCallServer/' + action.func, action.json)
         // check call api success
 
         if (respone && respone.status === 200) {
@@ -121,7 +80,7 @@ export function* API_Login(action) {
       /// catch api die
       yield delay(300);
       // call api
-      let respone = yield api.post(API_END_POINT + "/API_Customer_Login/", params)
+      let respone = yield api.post(API_END_POINT + "/API_Customer_Login", params)
       // check call api success
     //   if (respone && respone.status === 200) {
       if (respone && respone.status === 200) {
@@ -161,7 +120,7 @@ export function* API_spCallServerNoSQL(action) {
         }
         //End check select data redis
         // call api
-        let respone = yield api.post(API_END_POINT + "/ApiMain/" + params.func, params)
+        let respone = yield api.post(API_END_POINT + "/Main/" + params.func, params)
         // check call api success
         if (respone && respone.status == 200) {
             respone.data === "" ? action.resolve([]) : action.resolve(JSON.parse(respone.data))

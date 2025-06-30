@@ -47,11 +47,12 @@ export function API_Login(params, dispatch) {
     });
   }
 
-export function API_spCallServer(params, dispatch) {
+export function API_spCallServer(func, json, dispatch) {
     return new Promise((resolve, reject) => {
         dispatch({
             type: mainTypes.API_spCallServer,
-            params,
+            func,
+            json,
             resolve,
             reject
         })
