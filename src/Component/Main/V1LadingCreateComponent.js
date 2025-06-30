@@ -1880,13 +1880,11 @@ export const V1LadingCreateComponent = () => {
 
     //#region GỌI HÀM SAVE
     try {
-      const params = {
-        Json: JSON.stringify(pr),
-        func: "CPN_spLading_Save_V2",
-        API_key: APIKey,
-      };
-      // call redux saga
-      const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_Save_V2",
+      pr,
+      dispatch
+    );
       Alertsuccess("Thành công");
       Clearform();
       APIC_spLadingGetMany();

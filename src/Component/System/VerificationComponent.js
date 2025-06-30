@@ -47,12 +47,11 @@ export const VerificationComponent = () => {
       Alerterror("Nhập mã xác thực !");
       return;
     } else {
-      const pr = {
-        json: JSON.stringify(params),
-        func: "APIC_spCustomerVerification_V1",
-      };
-      debugger
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerVerification_V1",
+      params,
+      dispatch
+    );
       debugger
       if (data.resultCode === 0) {
         Alertsuccess("Xác thực thành công");

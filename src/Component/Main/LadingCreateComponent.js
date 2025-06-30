@@ -1499,8 +1499,9 @@ export const LadingCreateComponent = () => {
           Quanlity: ProductQuality,
         });
       }
-      const params = {
-        Json: JSON.stringify({
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_Save",
+      {
           ListBill: [{
             // TokenDevices:TOKEN_DEVICE,
             Id: LadingId,
@@ -1594,13 +1595,9 @@ export const LadingCreateComponent = () => {
             Lng_Recipient: GetLng,
           }],
           Products: prd
-        }),
-        func: "CPN_spLading_Save",
-      };
-
-      console.log(params)
-      // call redux saga
-      const result = await mainAction.API_spCallServer(params, dispatch);
+        },
+      dispatch
+    );
       //Gọi send notify
       /* if ((LadingId ?? 0) === 0) { //Kiểm tra nếu thêm mới thì gửi notify
         const NotifiParam = {

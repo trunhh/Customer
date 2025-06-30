@@ -289,13 +289,11 @@ export const LadingExcelComponent = () => {
 
   //#region Lưu vân đơn
   const CPN_spLading_Save = async () => {
-    const params = {
-      Json: JSON.stringify({ ListBill: LadingList, Products: [] }),
-      func: "CPN_spLading_Save",
-    };
-    try {
-      setDisable(true); // disable button
-      const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_Save",
+      { ListBill: LadingList, Products: [] },
+      dispatch
+    );
       setDisable(false); // disable button
       Alertsuccess(result.Status);
       setShowList("display-none");

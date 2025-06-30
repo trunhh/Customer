@@ -110,14 +110,11 @@ export const CustomerComplain = () => {
         SendFrom: "TRÊN WEBSITE CUSTOMER",
       };
       setDisable(true); // disable button
-      const pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spCustomerComplain_JsonAuto",
-        API_key: APIKey,
-        TokenDevices: TOKEN_DEVICE,
-      };
-      // call redux saga
-      const result = await mainAction.API_spCallServer(pr, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "APIC_spCustomerComplain_JsonAuto",
+      params,
+      dispatch
+    );
       // call redux saga
       mainAction.LOADING({ IsLoading: false }, dispatch);
       Alertsuccess("Thành công");

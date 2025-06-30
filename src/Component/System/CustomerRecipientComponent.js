@@ -165,12 +165,11 @@ export const CustomerRecipientComponent = () => {
       CustomerID: CustomerID,
       AddressId: item._original.Id,
     };
-    const pr = {
-      Json: JSON.stringify(params),
-      func: "APIC_spCustomerRecipientRemove_V1",
-    };
-    // call redux saga
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerRecipientRemove_V1",
+      params,
+      dispatch
+    );
     if (data.resultCode == 0) {
       setAddressList(AddressList.filter(p => p.Id !== item._original.Id));
       Alertsuccess(data.Message);

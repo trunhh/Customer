@@ -175,12 +175,11 @@ export const CustomerSenderComponent = () => {
           ", " +
           CityMeno
       };
-      const pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spCustomerSenderAddress_SaveJson",
-      };
-      // call redux saga
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerSenderAddress_SaveJson",
+      params,
+      dispatch
+    );
       Alertsuccess(data.localMessage);
       APIC_spCustomerSenderAddressList(CustomerID);
       PaginationTable();

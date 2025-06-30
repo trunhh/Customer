@@ -25,13 +25,11 @@ const SelectWardComp = React.forwardRef(({
       ParentID: ParentID,
       Type: 3,
     };
-
-    const params = {
-      Json: JSON.stringify(pr),
-      func: "CPN_spLocation_GET",
-    };
-    // call redux saga
-    const list = await mainAction.API_spCallServer(params, dispatch);
+    const list = await mainAction.API_spCallServer(
+      "CPN_spLocation_GET",
+      pr,
+      dispatch
+    );
 
     let dataOptions = [], IsActive = 0;
     dataOptions.push(_default);

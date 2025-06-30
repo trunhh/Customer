@@ -59,13 +59,11 @@ export const CustomerComplainList = () => {
         Code: Code,
         CustomerIds: GetCookieGroup("CustomerIds"),
       };
-
-      const pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spCustomerComplainList_Json",
-      };
-      // call redux saga
-      const result = await mainAction.API_spCallServer(pr, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "APIC_spCustomerComplainList_Json",
+      params,
+      dispatch
+    );
 
       setCustomerComplainlist(result);
       //console.log(data);

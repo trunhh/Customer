@@ -105,12 +105,11 @@ export const OutstandingDebtReportComponent = () => {
       ToDate: SelectMonth,
       CustomerIds: GetCookieGroup("CustomerIds"),
     };
-    const pr = {
-      Json: JSON.stringify(params),
-      func: "APIC_spOutstandingDebtReport_V1",
-    };
-    // call redux saga
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spOutstandingDebtReport_V1",
+      params,
+      dispatch
+    );
     let obj = new Object();
     obj.TotalDebt = 0;
     let _debtList = [],

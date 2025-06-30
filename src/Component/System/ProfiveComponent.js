@@ -136,12 +136,11 @@ export const ProfiveComponent = () => {
         BankName: BankName == null ? "" : BankName,
         BankBranch: BankBranch == null ? "" : BankBranch
       };
-      const pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spCustomerUpdateInfo_V1",
-      };
-      // call redux saga
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerUpdateInfo_V1",
+      params,
+      dispatch
+    );
       if (data.resultCode === 0)
         Alertsuccess(data.localMessage);
       else

@@ -953,12 +953,11 @@ export const SearchLading = () => {
 
     //#region in kiện A5+A4
     else if (Keys === 2) {
-      const params = {
-        Json: JSON.stringify(DataPrint),
-        func: "CPN_spLading_List_Detail",
-      };
-      debugger;
-      const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_List_Detail",
+      DataPrint,
+      dispatch
+    );
       debugger;
       await setHtmlPrint(
         DataPrint.map((v, index) => {
@@ -2642,12 +2641,11 @@ export const SearchLading = () => {
 
     //#region in kiện a6
     else if (Keys === 5) {
-      const params = {
-        Json: JSON.stringify(DataPrint),
-        func: "CPN_spLading_List_Detail",
-      };
-      debugger;
-      const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_List_Detail",
+      DataPrint,
+      dispatch
+    );
       debugger;
       await setHtmlPrint(
         DataPrint.map((v, index) => {
@@ -2910,12 +2908,11 @@ export const SearchLading = () => {
 
     //#region  in bill và kiện  a6
     else if (Keys === 4) {
-      const params = {
-        Json: JSON.stringify(DataPrint),
-        func: "CPN_spLading_List_Detail",
-      };
-      debugger;
-      const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_List_Detail",
+      DataPrint,
+      dispatch
+    );
       debugger;
       await setHtmlPrint(
         DataPrint.map((item, index) => {
