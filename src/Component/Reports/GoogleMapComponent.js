@@ -124,11 +124,11 @@ export const GoogleMapComponent = ({ data = [] }) => {
       CustomerId: GetCookie("CustomerID")
     }
     try {
-      const params = {
-        Json: JSON.stringify(pr),
-        func: "APIC_spRouteVehicle_List_Update"
-      }
-      const res = await mainAction.API_spCallServer(params, dispatch);
+      const res = await mainAction.API_spCallServer(
+          "APIC_spRouteVehicle_List_Update",
+          pr,
+          dispatch
+      );
       if (res.length > 0) {
         let _countBill = 0, _sumAmount = 0;
         let newData = res.map(i => {
@@ -168,11 +168,11 @@ export const GoogleMapComponent = ({ data = [] }) => {
       CustomerId: GetCookie("CustomerID")
     }
     try {
-      const params = {
-        Json: JSON.stringify(pr),
-        func: "APIC_spRouteVehicle_List"
-      }
-      const res = await mainAction.API_spCallServer(params, dispatch);
+      const res = await mainAction.API_spCallServer(
+          "APIC_spRouteVehicle_List",
+          pr,
+          dispatch
+      );
       if (res.length > 0) {
         let newData = res.sort((a, b) => a.IsOrderby > b.IsOrderby ? 1 : -1)
         CreateRoute(newData);
@@ -194,13 +194,13 @@ export const GoogleMapComponent = ({ data = [] }) => {
 
   const CPN_spRouterPostOffice_List = async (row) => {
     try {
-      const params = {
-        Json: JSON.stringify({
+      const result = await mainAction.API_spCallServer(
+          "CPN_spRouterPostOffice_List",
+          {
           OfficerId: 128//GetDataFromLogin("OfficerID")
-        }),
-        func: "CPN_spRouterPostOffice_List"
-      }
-      const result = await mainAction.API_spCallServer(params, dispatch);
+        },
+          dispatch
+      );
       if (result.length > 0) {
         setDataPostOffice(result)
         return;
@@ -431,11 +431,11 @@ export const GoogleMapComponent = ({ data = [] }) => {
   const [LadingList, setLadingList] = useState([]);
   const APIC_spVehicle_Lading = async () => {
     try {
-      const params = {
-        Json: JSON.stringify({ "CustomerId": GetCookie("CustomerID") }),
-        func: "APIC_spVehicle_Lading_Test"
-      }
-      const res = await mainAction.API_spCallServer(params, dispatch);
+      const res = await mainAction.API_spCallServer(
+          "APIC_spVehicle_Lading_Test",
+          { "CustomerId": GetCookie("CustomerID") },
+          dispatch
+      );
       setLadingList(res);
 
     } catch (error) {

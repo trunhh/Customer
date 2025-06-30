@@ -237,11 +237,11 @@ export const LadingExcelComponent = () => {
   };
 
   const CPN_spLading_CreateCode = async (LadingList, ListProduct) => {
-    const params = {
-      json: JSON.stringify({ ListBill: LadingList, Products: ListProduct }),
-      func: "CPN_spLading_CreateCode",
-    };
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+        "CPN_spLading_CreateCode",
+        { ListBill: LadingList, Products: ListProduct },
+        dispatch
+    );
     if (result[0].ListJsonOke === "{}") {
       setDisable(true);
     } else {

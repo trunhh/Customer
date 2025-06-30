@@ -1231,11 +1231,11 @@ export const SearchLading = () => {
 
     //#region  in bill và kiện  A5+A4
     else if (Keys === 0) {
-      const params = {
-        Json: JSON.stringify(DataPrint),
-        func: "CPN_spLading_List_Detail",
-      };
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+          "CPN_spLading_List_Detail",
+          DataPrint,
+          dispatch
+      );
       await setHtmlPrint(
         DataPrint.map((item, index) => {
           let TotalNumber = result.filter((e) => e.Code === item.Code);

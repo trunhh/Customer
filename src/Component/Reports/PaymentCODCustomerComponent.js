@@ -411,14 +411,14 @@ export const PaymentCODCustomerComponent = () => {
   const CPN_spPayment_COD_CustomerDetail_Report = async (id) => {
     try {
       setDisable(true)
-      const params = {
-        Json: JSON.stringify({
+      const result = await mainAction.API_spCallServer(
+          "CPN_spPayment_COD_CustomerDetail_Report",
+          {
           Id: id,
           UserId: 128
-        }),
-        func: "CPN_spPayment_COD_CustomerDetail_Report"
-      }
-      const result = await mainAction.API_spCallServer(params, dispatch);
+        },
+          dispatch
+      );
       if (result.length > 0) {
         setdataDetail(result)
         setDisable(false)

@@ -2329,11 +2329,11 @@ export const V1LadingCreateComponent = () => {
       WardId: WardTo, //WardTo
     };
 
-    const params = {
-      Json: JSON.stringify(pr),
-      func: "CPN_spLocationCheckCustomer",
-    };
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+        "CPN_spLocationCheckCustomer",
+        pr,
+        dispatch
+    );
 
     await setOutlineSave(result);
     await setOnSiteDeliveryPrice(result.OnSiteDeliveryPrice);

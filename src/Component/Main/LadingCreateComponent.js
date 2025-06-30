@@ -1862,11 +1862,11 @@ export const LadingCreateComponent = () => {
 
     console.log(JSON.stringify(pr))
 
-    const params = {
-      Json: JSON.stringify(pr),
-      func: "CPN_spLocationCheckCustomer_V2",
-    };
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+        "CPN_spLocationCheckCustomer_V2",
+        pr,
+        dispatch
+    );
     console.log(result)
 
     await setOutlineSave(result);

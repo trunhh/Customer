@@ -123,11 +123,11 @@ export const MapVehiclee = ({ data = [], formattedOrigin, formattedDestination }
             VehicleId: 0
         }
         try {
-            const params = {
-                Json: JSON.stringify(pr),
-                func: "CPN_spRouteVehicle_List_Update"
-            }
-            const res = await mainAction.API_spCallServer(params, dispatch);
+            const res = await mainAction.API_spCallServer(
+                "CPN_spRouteVehicle_List_Update",
+                pr,
+                dispatch
+            );
             if (res.length > 0) {
                 let newData = res.map(i => {
                     return {
@@ -160,11 +160,11 @@ export const MapVehiclee = ({ data = [], formattedOrigin, formattedDestination }
             Types: 0
         }
         try {
-            const params = {
-                Json: JSON.stringify(pr),
-                func: "CPN_spRouteVehicle_List"
-            }
-            const res = await mainAction.API_spCallServer(params, dispatch);
+            const res = await mainAction.API_spCallServer(
+                "CPN_spRouteVehicle_List",
+                pr,
+                dispatch
+            );
             if (res.length > 0) {
                 let newData = res.sort((a, b) => a.IsOrderby > b.IsOrderby ? 1 : -1)
                 console.log(newData);
@@ -184,13 +184,13 @@ export const MapVehiclee = ({ data = [], formattedOrigin, formattedDestination }
     // active post
     const CPN_spRouterPostOffice_List = async (row) => {
         try {
-            const params = {
-                Json: JSON.stringify({
+            const result = await mainAction.API_spCallServer(
+                "CPN_spRouterPostOffice_List",
+                {
                     OfficerId: GetDataFromLogin("OfficerID")
-                }),
-                func: "CPN_spRouterPostOffice_List"
-            }
-            const result = await mainAction.API_spCallServer(params, dispatch);
+                },
+                dispatch
+            );
             if (result.length > 0) {
                 setDataPostOffice(result)
                 return;

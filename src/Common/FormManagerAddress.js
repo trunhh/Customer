@@ -210,12 +210,11 @@ const _FormManagerAddress = ({
                 return
 
             } else {
-                const params = {
-                    Json: JSON.stringify({ FullAddress: FullAddress, CustomerID: GetCookie("CustomerID"), CustomerRecipientId: CustomerRecipientId }),
-                    func: "CPN_spManagerAddress_Check"
-                }
-
-                const result = await mainAction.API_spCallServer(params, dispatch);
+                const result = await mainAction.API_spCallServer(
+                    "CPN_spManagerAddress_Check",
+                    { FullAddress: FullAddress, CustomerID: GetCookie("CustomerID"), CustomerRecipientId: CustomerRecipientId },
+                    dispatch
+                );
                 debugger
                 if (result.Status === "OK") {
                     if (Type === 'main') {
@@ -267,14 +266,14 @@ const _FormManagerAddress = ({
                     return
                 }
                 setDisableBtn(true)
-                const params = {
-                    Json: JSON.stringify({
+                const result = await mainAction.API_spCallServer(
+                    "CPN_spManagerAddress_EditList",
+                    {
                         CodeAddress: e.target.value,
                         CreateId: 0
-                    }),
-                    func: "CPN_spManagerAddress_EditList"
-                }
-                const result = await mainAction.API_spCallServer(params, dispatch);
+                    },
+                    dispatch
+                );
 
                 if (result.Status === "NO") {
                     Alertwarning(result.ReturnMess)
@@ -327,13 +326,13 @@ const _FormManagerAddress = ({
         try {
 
             setDisableBtn(true)
-            const params = {
-                Json: JSON.stringify({
+            const result = await mainAction.API_spCallServer(
+                "CPN_spManagerAddress_Get",
+                {
                     AddressId: addressEditId === 1000 ? 0 : addressEditId,
-                }),
-                func: "CPN_spManagerAddress_Get"
-            }
-            const result = await mainAction.API_spCallServer(params, dispatch);
+                },
+                dispatch
+            );
 
             if (result.length > 0) {
                 setTitle(I18n.t('Location.ManagerAddress'))

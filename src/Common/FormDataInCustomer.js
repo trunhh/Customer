@@ -20,12 +20,11 @@ const FormDataInCustomerComp = ({
     const CPN_spBKPayment_Customer_CheckIn_List = async () => {
 
         if (CustomerId === -1) return;
-        const params = {
-            Json: JSON.stringify({ CustomerId: CustomerId,Type:Type }),
-            func: "CPN_spBKPayment_Customer_CheckIn_List",
-        }
-
-        const list = await mainAction.API_spCallServer(params, dispatch);
+        const list = await mainAction.API_spCallServer(
+            "CPN_spBKPayment_Customer_CheckIn_List",
+            { CustomerId: CustomerId,Type:Type },
+            dispatch
+        );
         setData(list)
         onListCheck(list);
     }
