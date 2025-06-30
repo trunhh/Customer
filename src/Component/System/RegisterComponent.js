@@ -193,12 +193,11 @@ export const RegisterComponent = () => {
 
     try {
       setDisable(false);
-      const pr = {
-        API_key: APIKey,
-        Json: JSON.stringify(params),
-        func: "APIC_spCustomerRegister_Save_V1",
-      };
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spCustomerRegister_Save_V1",
+          params,
+          dispatch
+      );
       if (data[0].resultCode === 0) {
         Alertsuccess(data[0].localMessage);
         history.push("/");
@@ -276,7 +275,6 @@ export const RegisterComponent = () => {
     obj.googleId = response.profileObj.googleId;
     obj.imageUrl = response.profileObj.imageUrl;
     const params = {
-      API_key: APIKey,
       Json:
         '{"SocialID":"' +
         response.profileObj.googleId +

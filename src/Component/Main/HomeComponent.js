@@ -123,7 +123,6 @@ export const HomeComponent = () => {
 		let pr = {
 			Json: JSON.stringify(params),
 			func: "APIC_spLading_SumByStatusOverView",
-			API_key: APIKey,
 		};
 		debugger
 		const result = await mainAction.API_spCallServer(pr, dispatch);

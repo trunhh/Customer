@@ -370,7 +370,6 @@ export const LadingCreateComponent = () => {
       let prList = {
         Json: JSON.stringify(params),
         func: "APIC_spLadingGetManyJsonAuto",
-        API_key: APIKey,
       };
       const data = await mainAction.API_spCallServer(prList, dispatch);
       setdataLading(data);
@@ -1243,7 +1242,6 @@ export const LadingCreateComponent = () => {
     const params = {
       Json: "[{\"WardId\":\"" + item.value + "\"}]",
       func: "APIC_spCustomerRecipientGetByLocation",
-      API_key: APIKey,
     };
     // call redux saga
     const result = await mainAction.API_spCallServer(params, dispatch);
@@ -1613,7 +1611,6 @@ export const LadingCreateComponent = () => {
             ],
           }),
           func: "APIC_spSendNotification",
-          API_key: APIKey,
         };
         const resultNotify = await mainAction.API_spCallServer(
           NotifiParam,
@@ -1662,12 +1659,11 @@ export const LadingCreateComponent = () => {
       Lat: GetLat,
       Lng: GetLng,
     };
-    const pr = {
-      API_key: APIKey,
-      json: JSON.stringify(params),
-      func: "APIC_spCustomerRecipientSaveJson",
-    };
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+        "APIC_spCustomerRecipientSaveJson",
+        params,
+        dispatch
+    );
   };
 
 
@@ -1681,7 +1677,6 @@ export const LadingCreateComponent = () => {
       let pr = {
         Json: "{\"LadingId\":" + row._original.Id + ",\"CustomerID\":" + Customer?.CustomerID + "}",
         func: "APIC_spLading_Find",
-        API_key: APIKey,
         TokenDevices: TOKEN_DEVICE,
       };
       const result = await mainAction.API_spCallServer(pr, dispatch);
@@ -1921,7 +1916,6 @@ export const LadingCreateComponent = () => {
     };
     try {
       const params = {
-        API_key: APIKey,
         Json: JSON.stringify(pr),
         func: "CPN_spLading_PriceMain",
       };
@@ -2006,12 +2000,11 @@ export const LadingCreateComponent = () => {
     setIsProtocol(_listServiceSelect.indexOf(";1;") !== -1 ? 1 : 0);
 
     try {
-      const params = {
-        API_key: APIKey,
-        Json: JSON.stringify([pr]),
-        func: "CPN_spLadingGetAnotherServiceMoney",
-      };
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+          "CPN_spLadingGetAnotherServiceMoney",
+          [pr],
+          dispatch
+      );
       const data = result[0];
       setDealine(FormatDateJson(data.DealineTime));
       setTHBBPrice(FormatMoney(data.THBBMoney, 0)); //  thu hồi bb

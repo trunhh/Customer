@@ -84,7 +84,6 @@ export const PaymentCODCustomerComponent = () => {
     let pr = {
       Json: JSON.stringify(params),
       func: "CPN_spPayment_COD_Customer_Report",
-      API_key: APIKey,
       TokenDevices: TOKEN_DEVICE,
     };
     const data = await mainAction.API_spCallServer(pr, dispatch);

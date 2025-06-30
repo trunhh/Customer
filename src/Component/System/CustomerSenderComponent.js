@@ -85,7 +85,6 @@ export const CustomerSenderComponent = () => {
 
   const APIC_spCustomerSenderAddressList = async (ID) => {
     const params = {
-      API_key: APIKey,
       Json: '{"CustomerId":' + ID + "}",
       func: "APIC_spCustomerSenderAddressList",
     };

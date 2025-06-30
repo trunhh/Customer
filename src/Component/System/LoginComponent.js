@@ -90,12 +90,11 @@ export const LoginComponent = () => {
         SocialType: "Facebook",
         SocialLoginObj: response,
       };
-      const params = {
-        API_key: APIKey,
-        Json: JSON.stringify(pr),
-        func: "APIC_spCustomerSocialLoginV2",
-      };
-      const list = await mainAction.API_spCallServer(params, dispatch);
+      const list = await mainAction.API_spCallServer(
+          "APIC_spCustomerSocialLoginV2",
+          pr,
+          dispatch
+      );
       if (list.length > 0) {
         let ensc = EncodeString(JSON.stringify(list[0]));
         localStorage.setItem("login", ensc);
@@ -120,16 +119,14 @@ export const LoginComponent = () => {
   };
 
   const responseGoogle = async (response) => {
-    const params = {
-      API_key: APIKey,
-      Json: JSON.stringify({
+    const list = await mainAction.API_spCallServer(
+        "APIC_spCustomerSocialLoginV2",
+        {
         GoogleId: response.profileObj.googleId,
         SocialLoginObj: response.profileObj,
-      }),
-      func: "APIC_spCustomerSocialLoginV2",
-    };
-
-    const list = await mainAction.API_spCallServer(params, dispatch);
+      },
+        dispatch
+    );
 
     if (list.length > 0) {
       let ensc = EncodeString(JSON.stringify(list[0]));

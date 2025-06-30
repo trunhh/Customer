@@ -71,7 +71,6 @@ export const LadingOutPrint = (SearchCode) => {
             let pr = {
                 Json: "{\"Code\":\"" + code + "\"}",
                 func: "APIC_spLading_Find",
-                API_key: APIKey,
                 TokenDevices: TOKEN_DEVICE,
             };
             const data = await mainAction.API_spCallServer(pr, dispatch);

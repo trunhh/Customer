@@ -135,7 +135,6 @@ export const LadingGetPriceComponent = () => {
       PostOffice_Id: GetCookie("PostOfficeId"),
     };
     const params = {
-      API_key: APIKey,
       TokenDevices: TOKEN_DEVICE,
       Json: JSON.stringify(pr),
       func: "CPN_spLading_EstimatesPrice",

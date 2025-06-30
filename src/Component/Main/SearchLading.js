@@ -151,7 +151,6 @@ export const SearchLading = () => {
     let prList = {
       Json: JSON.stringify(params),
       func: "APIC_spLadingGetManyJsonAuto",
-      API_key: APIKey,
     };
     const data = await mainAction.API_spCallServer(prList, dispatch);
     if (data.length > 0) {
@@ -267,7 +266,6 @@ export const SearchLading = () => {
       let pr = {
         Json: JSON.stringify(params),
         func: "APIC_spLading_SumByStatus",
-        API_key: APIKey,
       };
       const _count = await mainAction.API_spCallServer(pr, dispatch);
       _count.map((item, index) => {
@@ -290,7 +288,6 @@ export const SearchLading = () => {
       let prList = {
         Json: JSON.stringify(params),
         func: "APIC_spLadingGetManyJsonAuto",
-        API_key: APIKey,
       };
       const data = await mainAction.API_spCallServer(prList, dispatch);
       setdataLading(data);

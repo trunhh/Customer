@@ -45,7 +45,6 @@ export const HeaderMenu = () => {
       /* let pr = {
         Json: "{\"GroupId\":" + group + "}",
         func: "APIC_spCustomerGetByGroupJson",
-        API_key: APIKey,
         TokenDevices: TOKEN_DEVICE,
       };
       const data = await mainAction.API_spCallServer(pr, dispatch); */

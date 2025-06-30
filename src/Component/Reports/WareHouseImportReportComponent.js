@@ -161,7 +161,6 @@ export const WareHouseImportReportComponent = () => {
     let prList = {
       Json: JSON.stringify(params),
       func: "APIC_spWareHouse_Import_Report_Detail",
-      API_key: APIKey,
     };
     const data = await mainAction.API_spCallServer(prList, dispatch);
     setReportDataDetail(data);

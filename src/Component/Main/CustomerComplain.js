@@ -133,7 +133,6 @@ export const CustomerComplain = () => {
           ],
         }),
         func: "APIC_spSendNotification",
-        API_key: APIKey,
       };
       const resultNotify = await mainAction.API_spCallServer(
         NotifiParam,

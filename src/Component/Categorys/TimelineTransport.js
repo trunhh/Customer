@@ -59,7 +59,6 @@ export const TimelineTransport = () => {
       let pr = {
         Json: JSON.stringify(params),
         func: "APIC_spTimelineTransport",
-        API_key: APIKey,
         TokenDevices: "website",
       };
       const data = await mainAction.API_spCallServer(pr, dispatch);

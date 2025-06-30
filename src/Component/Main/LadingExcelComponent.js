@@ -259,7 +259,6 @@ export const LadingExcelComponent = () => {
   const [TotalBill, setTotalBill] = useState(0);
   const CPN_spLading_Upload_Excel = async (LadingList, ListProduct) => {
     const params = {
-      API_key: APIKey,
       json: JSON.stringify({ ListBill: LadingList, Products: ListProduct }),
       func: "CPN_spLading_Upload_Excel",
     };
@@ -314,7 +313,6 @@ export const LadingExcelComponent = () => {
           ],
         }),
         func: "APIC_spSendNotification",
-        API_key: APIKey,
       };
       const resultNotify = await mainAction.API_spCallServer(
         NotifiParam,

@@ -96,7 +96,6 @@ export const CustomerRecipientComponent = () => {
     const params = {
       Json: "[{\"WardId\":\"" + item.value + "\"}]",
       func: "APIC_spCustomerRecipientGetByLocation",
-      API_key: APIKey,
     };
     // call redux saga
     const result = await mainAction.API_spCallServer(params, dispatch);
@@ -127,7 +126,6 @@ export const CustomerRecipientComponent = () => {
 
   const APIC_spCustomerRecipientLoad = async () => {
     const params = {
-      API_key: APIKey,
       Json: '{"CustomerId":' + CustomerID + "}",
       func: "APIC_spCustomerRecipientLoad",
     };
@@ -232,12 +230,11 @@ export const CustomerRecipientComponent = () => {
         Lat: GetLat,
         Lng: GetLng,
       };
-      const pr = {
-        API_key: APIKey,
-        json: JSON.stringify(params),
-        func: "APIC_spCustomerRecipientSaveJson",
-      };
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spCustomerRecipientSaveJson",
+          params,
+          dispatch
+      );
       Alertsuccess(data.localMessage);
       APIC_spCustomerRecipientLoad();
       setDisable(false);
