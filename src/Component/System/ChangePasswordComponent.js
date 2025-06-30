@@ -86,11 +86,11 @@ export const ChangePasswordComponent = () => {
         Key: null,
       };
       if (CustomerID !== 0) {
-        let pr = {
-          Json: JSON.stringify(params),
-          func: "APIC_spCustomerResetPass_V2",
-        };
-        const data = await mainAction.API_spCallServer(pr, dispatch);
+        const data = await mainAction.API_spCallServer(
+            "APIC_spCustomerResetPass_V2",
+            params,
+            dispatch
+        );
         if (data != []) {
           Alertsuccess("Đổi mật khẩu thành công!");
           localStorage.setItem("login", "");

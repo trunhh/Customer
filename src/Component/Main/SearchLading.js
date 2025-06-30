@@ -148,11 +148,11 @@ export const SearchLading = () => {
       Skip: 0,
       Take: 15000,
     };
-    let prList = {
-      Json: JSON.stringify(params),
-      func: "APIC_spLadingGetManyJsonAuto",
-    };
-    const data = await mainAction.API_spCallServer(prList, dispatch);
+    const data = await mainAction.API_spCallServer(
+        "APIC_spLadingGetManyJsonAuto",
+        params,
+        dispatch
+    );
     if (data.length > 0) {
       let dataExcel = data.map((item, index) => {
         return {
@@ -263,11 +263,11 @@ export const SearchLading = () => {
       //#endregion Set status name cho tiêu đề
 
       //#region Đếm vận đơn theo Status
-      let pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spLading_SumByStatus",
-      };
-      const _count = await mainAction.API_spCallServer(pr, dispatch);
+      const _count = await mainAction.API_spCallServer(
+          "APIC_spLading_SumByStatus",
+          params,
+          dispatch
+      );
       _count.map((item, index) => {
         if (item.Status === 1) setStatus1(item.Total);
         if (item.Status === 2) setStatus2(item.Total);
@@ -285,11 +285,11 @@ export const SearchLading = () => {
       //#endregion Đếm vận đơn theo Status
 
       //#region Get danh sách vận đơn
-      let prList = {
-        Json: JSON.stringify(params),
-        func: "APIC_spLadingGetManyJsonAuto",
-      };
-      const data = await mainAction.API_spCallServer(prList, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spLadingGetManyJsonAuto",
+          params,
+          dispatch
+      );
       setdataLading(data);
       setDataPrint([]);
       setViewDetail(null);

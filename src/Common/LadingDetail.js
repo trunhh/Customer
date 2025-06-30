@@ -35,11 +35,11 @@ const LadingDetailComp = ({
           GroupId: GetCookieGroup("GroupId")
         }
 
-        let pr = {
-          Json: JSON.stringify(param),
-          func: "APIC_spLading_Find",
-        };
-        const data = await mainAction.API_spCallServer(pr, dispatch);
+        const data = await mainAction.API_spCallServer(
+            "APIC_spLading_Find",
+            param,
+            dispatch
+        );
         setDetail(data.Detail[0]);
         setHistory(data.History);
         setProducts(data.Products);

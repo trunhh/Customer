@@ -367,11 +367,11 @@ export const LadingCreateComponent = () => {
     };
 
     try {
-      let prList = {
-        Json: JSON.stringify(params),
-        func: "APIC_spLadingGetManyJsonAuto",
-      };
-      const data = await mainAction.API_spCallServer(prList, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spLadingGetManyJsonAuto",
+          params,
+          dispatch
+      );
       setdataLading(data);
       //setDisable(false); // disable button
       setIsRunservice(1);
@@ -1031,11 +1031,11 @@ export const LadingCreateComponent = () => {
     let params1 = {
       Type: 1,
     };
-    let prList = {
-      Json: JSON.stringify(params1),
-      func: "APIC_spService_List",
-    };
-    const dataGTGT = await mainAction.API_spCallServer(prList, dispatch);
+    const dataGTGT = await mainAction.API_spCallServer(
+        "APIC_spService_List",
+        params1,
+        dispatch
+    );
     let arrGTGT = [];
     dataGTGT.map((item, index) => {
       item.checkboxGTGT = false;

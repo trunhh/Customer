@@ -71,11 +71,11 @@ export const WareHousePersoninChargeReportComponent = () => {
       CustomerId: CustomerID,
       CustomerIds: GetCookieGroup("CustomerIds"),
     };
-    let pr = {
-      Json: JSON.stringify(params),
-      func: "WH_spWareHouse_List_V1",
-    };
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+        "WH_spWareHouse_List_V1",
+        params,
+        dispatch
+    );
 
     let _wareHouseList = [{ value: 0, label: "Chọn kho" }];
     setWareHouse({ value: 0, label: "Chọn kho" });
@@ -116,11 +116,11 @@ export const WareHousePersoninChargeReportComponent = () => {
       WhId: item.value,
     };
     
-    let prList = {
-      Json: JSON.stringify(params),
-      func: "WH_spWareHouse_Area_List_V1",
-    };
-    const data = await mainAction.API_spCallServer(prList, dispatch);
+    const data = await mainAction.API_spCallServer(
+        "WH_spWareHouse_Area_List_V1",
+        params,
+        dispatch
+    );
 
     let _parcelList = [{ value: 0, label: "Chọn lô" }];
     setParcel({ value: 0, label: "Chọn lô" });
@@ -163,11 +163,11 @@ export const WareHousePersoninChargeReportComponent = () => {
       SupplierId: Supplier.value
     };
 
-    let prList = {
-      Json: JSON.stringify(params),
-      func: "WH_spWareHouse_InventoryPersoninCharge_Report",
-    };
-    const data = await mainAction.API_spCallServer(prList, dispatch);
+    const data = await mainAction.API_spCallServer(
+        "WH_spWareHouse_InventoryPersoninCharge_Report",
+        params,
+        dispatch
+    );
     setReportData(data);
     setReportDataDetailImport([]);
     setReportDataDetailOutput([]);

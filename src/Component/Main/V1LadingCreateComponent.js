@@ -361,11 +361,11 @@ export const V1LadingCreateComponent = () => {
     };
 
     try {
-      let prList = {
-        Json: JSON.stringify(params),
-        func: "APIC_spLadingGetManyJsonAuto",
-      };
-      const data = await mainAction.API_spCallServer(prList, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spLadingGetManyJsonAuto",
+          params,
+          dispatch
+      );
       setdataLading(data);
       //setDisable(false); // disable button
       setIsRunservice(1);
