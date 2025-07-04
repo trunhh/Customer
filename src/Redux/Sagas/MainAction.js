@@ -1,6 +1,6 @@
 import { put, takeEvery, take, cancel, delay, takeLatest } from 'redux-saga/effects';
 import { mainTypes } from "../Actions";
-import { APIKey, API_END_POINT, TOKEN_DEVICE, api, setToken } from "../../Services/Api";
+import { APIKey, API_END_POINT, TOKEN_DEVICE, api, authApi, setToken } from "../../Services/Api";
 import { EN, VN, LANE } from '../../Enum';
 import { getData } from '../../Utils/Storage';
 import I18n from '../../Language'
@@ -29,7 +29,7 @@ export function* API_spCallServer(action) {
         yield delay(300);
 
         // call api
-        let respone = yield api.post(API_END_POINT + '/API_spCallServer/' + action.func, action.json)
+        let respone = yield authApi.post(API_END_POINT + '/API_spCallServer/' + action.func, action.json)
         // check call api success
 
         if (respone && respone.status === 200) {
