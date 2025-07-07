@@ -14,6 +14,7 @@ import {
   FACEBOOK_LOGIN_APPID,
 } from "../../Services/Api";
 import LayoutLogin from "../../Layout/LayoutLogin";
+import Captcha from "./Captcha";
 
 export const LoginV1Component = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,8 @@ export const LoginV1Component = () => {
 
   const [PassHide, setPassHide] = useState("password");
   const [PassEye, setPassEye] = useState("");
+
+  const [captCha, setCaptCha] = useState("");
 
   useEffect(() => {
     
@@ -358,11 +361,14 @@ export const LoginV1Component = () => {
                   Quên mật khẩu ?
                 </Link>
               </div>
+              <div className="form-group margin-top-20 width60">
+                <Captcha setCaptCha={setCaptCha}></Captcha>
+              </div>
               <div className="form-group text-center margin-top-20 width60">
                 <button
                   type="button"
                   style={{ width: "100%" }}
-                  className="margin-top-20 btn text-transform btn-sm btn-save"
+                  className="btn text-transform btn-sm btn-save"
                   onClick={onClickLogin}
                 >
                   Đăng nhập<div className="ripple-container"></div>

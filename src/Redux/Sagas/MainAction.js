@@ -1,10 +1,11 @@
 import { put, takeEvery, take, cancel, delay, takeLatest } from 'redux-saga/effects';
 import { mainTypes } from "../Actions";
-import { APIKey, API_END_POINT, TOKEN_DEVICE, api, authApi, setToken } from "../../Services/Api";
+import { APIKey, API_END_POINT, TOKEN_DEVICE, api, authApi, setCaptchaToken, setToken } from "../../Services/Api";
 import { EN, VN, LANE } from '../../Enum';
 import { getData } from '../../Utils/Storage';
 import I18n from '../../Language'
 import { param } from 'jquery';
+import store from '../Store';
 
 export function* LOADING(action) {
     try {
@@ -71,6 +72,9 @@ export function* API_spCallServer(action) {
 
 export function* API_Login(action) {
     try {
+      const state = store.getState();
+      const captchaToken = state.Session.captchaState.captchaToken;
+      setCaptchaToken(captchaToken);
       //show loading
       yield put({ type: mainTypes.LOADING_SUCCESS, payload: true });
       //params received

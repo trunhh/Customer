@@ -17,6 +17,8 @@ export const GOOGLE_MAP_API_KEY = "AIzaSyAl8WZfFte7tdA-GgRC281-c8ufJdEGtd4"; //'
 export const GOOGLE_MAP_ZOOM = 5;
 export const GOOGLE_MAP_CENTER = { lat: 14.775869, lng: 106.688661 };
 
+export const CaptchaKey = "1x00000000000000000000AA";
+
 export const api = Axios.create({
   baseURL: API_END_POINT,
   headers: {
@@ -25,10 +27,15 @@ export const api = Axios.create({
     allowedHeaders: ["Content-Type", "Authorization"],
   },
 });
+
 export const setToken = (token) => {
   // api.defaults.headers.common.Authorization = `Bearer ${token}`
   authApi.defaults.headers.common.Authorization = token;
 };
+
+export const setCaptchaToken = (token) => {
+  api.defaults.headers['X-Captcha-Token'] = token;
+}
 
 export const authApi = Axios.create({
   baseURL: API_END_POINT,
