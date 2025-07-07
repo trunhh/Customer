@@ -51,12 +51,11 @@ export const CustomerPaymentDealineComponent = () => {
     };
 
     try {
-      const pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spCustomerPaymentDealine_Report_V1",
-      };
-      // call redux saga
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerPaymentDealine_Report_V1",
+      params,
+      dispatch
+    );
       setdataA(data.DataA);
       setdataB(data.DataB);
       setdataC(data.DataC);

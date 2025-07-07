@@ -29,13 +29,13 @@ const SelectServiceComp = React.forwardRef(({
   }, [onActive]);
 
   const APIC_spServiceGetMany = async () => {
-    let pr = {
-      Json: JSON.stringify({
+    const list = await mainAction.API_spCallServer(
+        "APIC_spService_List",
+        {
         Type: 0,
-      }),
-      func: "APIC_spService_List",
-    };
-    const list = await mainAction.API_spCallServer(pr, dispatch);
+      },
+        dispatch
+    );
     let dataOptions = [], IsActive = 0;
     dataOptions.push({ value: 0, label: "Chọn dịch vụ" });
     if (onActive === 0) setValueS(_default);

@@ -33,11 +33,11 @@ export const LeftMenu = () => {
   const System_spLogModule_Save = async (ActionName) => {
     const prl = GetModule(ActionName);
     prl.UserId = GetCookie("CustomerID")
-    const paramsl = {
-      Json: JSON.stringify(prl),
-      func: "CPN_spLogModule_Save",
-    }
-    const result = await mainAction.API_spCallServer(paramsl, dispatch);
+    const result = await mainAction.API_spCallServer(
+        "CPN_spLogModule_Save",
+        prl,
+        dispatch
+    );
     console.log(result);
     //#endregion
   };

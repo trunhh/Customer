@@ -77,12 +77,11 @@ export const KpiDeliveryCODReportComponent = () => {
       ToDate: ToDate.toISOString(),
       CustomerIds: GetCookieGroup("CustomerIds"),
     };
-    const pr = {
-      Json: JSON.stringify(params),
-      func: "APIC_spKpiDeliveryCODReport_V1",
-    };
-    // call redux saga
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spKpiDeliveryCODReport_V1",
+      params,
+      dispatch
+    );
     setReportData(data);
     //PaginationTable();
     setShowDetail("display-none");

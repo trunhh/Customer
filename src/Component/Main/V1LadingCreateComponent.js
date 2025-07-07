@@ -361,12 +361,11 @@ export const V1LadingCreateComponent = () => {
     };
 
     try {
-      let prList = {
-        Json: JSON.stringify(params),
-        func: "APIC_spLadingGetManyJsonAuto",
-        API_key: APIKey,
-      };
-      const data = await mainAction.API_spCallServer(prList, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spLadingGetManyJsonAuto",
+          params,
+          dispatch
+      );
       setdataLading(data);
       //setDisable(false); // disable button
       setIsRunservice(1);
@@ -1880,13 +1879,11 @@ export const V1LadingCreateComponent = () => {
 
     //#region GỌI HÀM SAVE
     try {
-      const params = {
-        Json: JSON.stringify(pr),
-        func: "CPN_spLading_Save_V2",
-        API_key: APIKey,
-      };
-      // call redux saga
-      const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_Save_V2",
+      pr,
+      dispatch
+    );
       Alertsuccess("Thành công");
       Clearform();
       APIC_spLadingGetMany();
@@ -1907,7 +1904,6 @@ export const V1LadingCreateComponent = () => {
             ],
           }),
           func: "APIC_spSendNotification",
-          API_key: APIKey,
         };
         const resultNotify = await mainAction.API_spCallServer(
           NotifiParam,
@@ -1929,13 +1925,11 @@ export const V1LadingCreateComponent = () => {
   const APIC_spLadingEdit = async (row) => {
     try {
       //Lấy thông tin vận đơn
-      let pr = {
-        Json: "{\"LadingId\":" + row._original.Id + ",\"CustomerID\":" + Customer?.CustomerID + "}",
-        func: "APIC_spLading_Find",
-        API_key: APIKey,
-        TokenDevices: TOKEN_DEVICE,
-      };
-      const result = await mainAction.API_spCallServer(pr, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "APIC_spLading_Find",
+        { LadingId:row._original.Id, CustomerID:Customer?.CustomerID },
+        dispatch
+      );
       let data = result.Detail[0];
       setshowingdetail(true); // open detail view
       setdisablerecipient();
@@ -2132,12 +2126,12 @@ export const V1LadingCreateComponent = () => {
       DataLike: data,
       CustomerId: GetCookie("CustomerID")
     }
-    const params = {
-      Json: JSON.stringify(pr),
-      func: "CPN_spRecipientAddress_Like_V2"
-    }
     try {
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "CPN_spRecipientAddress_Like_V2",
+        pr,
+        dispatch
+      );
       if (key === 1) {
         if (result.length > 0) {
           setListDataRecipient(result);
@@ -2168,8 +2162,10 @@ export const V1LadingCreateComponent = () => {
   const CPN_spManagerAddress_Save = async (_lat, _lng) => {
     try {
       debugger
-      const params = {
-        Json: JSON.stringify({
+      setCodeAddress('K-' + DistrictCodeTo + WardCodeTo + DistrictTo + WardTo);
+      const result = await mainAction.API_spCallServer(
+        "CPN_spManagerAddress_Save_Test",
+        {
           Id: KeySetUpId,
           CodeAddress: 'K-' + DistrictCodeTo + WardCodeTo + DistrictTo + WardTo,
           NameAddress: RecipientName,
@@ -2193,12 +2189,9 @@ export const V1LadingCreateComponent = () => {
           TonTimeDown: 30,
           CustomerId: GetCookie("CustomerID"),
           CustomerRecipientId: RecipientId
-        }),
-        func: "CPN_spManagerAddress_Save_Test"
-      }
-
-      setCodeAddress('K-' + DistrictCodeTo + WardCodeTo + DistrictTo + WardTo);
-      const result = await mainAction.API_spCallServer(params, dispatch);
+        },
+        dispatch
+      );
       debugger
       if (result.Status === "OK") {
         Alertsuccess(result.ReturnMess);
@@ -2254,13 +2247,12 @@ export const V1LadingCreateComponent = () => {
       return;
     }
     try {
-      const params = {
-        Json: JSON.stringify({ FullAddress: RecipientAddress, CustomerID: GetCookie("CustomerID"), CustomerRecipientId: RecipientId }),
-        func: "CPN_spManagerAddress_Check"
-      }
       debugger
-      const result = await mainAction.API_spCallServer(params, dispatch);
-      debugger
+      const result = await mainAction.API_spCallServer(
+        "CPN_spManagerAddress_Check",
+        { FullAddress: RecipientAddress, CustomerID: GetCookie("CustomerID"), CustomerRecipientId: RecipientId },
+        dispatch
+      );
       if (result.Status === "OK") {
         //setreturnm("")
         const _GetLatLngGoogle = await GetLatLngGoogle(RecipientAddress);
@@ -2329,11 +2321,11 @@ export const V1LadingCreateComponent = () => {
       WardId: WardTo, //WardTo
     };
 
-    const params = {
-      Json: JSON.stringify(pr),
-      func: "CPN_spLocationCheckCustomer",
-    };
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+        "CPN_spLocationCheckCustomer",
+        pr,
+        dispatch
+    );
 
     await setOutlineSave(result);
     await setOnSiteDeliveryPrice(result.OnSiteDeliveryPrice);
@@ -2385,13 +2377,12 @@ export const V1LadingCreateComponent = () => {
       IsAPI: 1,
     };
     try {
-      const params = {
-        API_key: APIKey,
-        Json: JSON.stringify(pr),
-        func: "CPN_spLading_PriceMain",
-      };
       // call redux saga
-      const data = await mainAction.API_spCallServer(params, dispatch);
+      const data = await mainAction.API_spCallServer(
+        "CPN_spLading_PriceMain",
+        pr,
+        dispatch
+      );
       let pricemain = data.length === 0 ? 18000 : parseInt(data);
       let PriceNT = pricemain * OnSiteDeliveryPrice / 100;
       await setOutlineSave({ OnSiteDeliveryPrice: OnSiteDeliveryPrice, OnSiteDeliveryPriceMoney: PriceNT });
@@ -2470,12 +2461,11 @@ export const V1LadingCreateComponent = () => {
     };
 
     try {
-      const params = {
-        API_key: APIKey,
-        Json: JSON.stringify([pr]),
-        func: "CPN_spLadingGetAnotherServiceMoney",
-      };
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+          "CPN_spLadingGetAnotherServiceMoney",
+          [pr],
+          dispatch
+      );
       const data = result[0];
       setDealine(FormatDateJson(data.DealineTime));
       setTHBBPrice(FormatMoney(data.THBBMoney, 0)); //  thu hồi bb

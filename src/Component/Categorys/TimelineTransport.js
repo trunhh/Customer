@@ -56,13 +56,11 @@ export const TimelineTransport = () => {
         IDGo_Province: CityMeno,
       };
       debugger;
-      let pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spTimelineTransport",
-        API_key: APIKey,
-        TokenDevices: "website",
-      };
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spTimelineTransport",
+          params,
+          dispatch
+      );
       setData(data);
       setShowTable("");
     } catch (err) {

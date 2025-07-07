@@ -81,13 +81,11 @@ export const PaymentCODCustomerComponent = () => {
       Todate: ToDate.toISOString(),
       Status: -1
     };
-    let pr = {
-      Json: JSON.stringify(params),
-      func: "CPN_spPayment_COD_Customer_Report",
-      API_key: APIKey,
-      TokenDevices: TOKEN_DEVICE,
-    };
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "CPN_spPayment_COD_Customer_Report",
+      params,
+      dispatch
+    );
     setReportData(data);
     if (data.length === 0) setNoData("");
     else setNoData("display-none");
@@ -411,14 +409,14 @@ export const PaymentCODCustomerComponent = () => {
   const CPN_spPayment_COD_CustomerDetail_Report = async (id) => {
     try {
       setDisable(true)
-      const params = {
-        Json: JSON.stringify({
+      const result = await mainAction.API_spCallServer(
+          "CPN_spPayment_COD_CustomerDetail_Report",
+          {
           Id: id,
           UserId: 128
-        }),
-        func: "CPN_spPayment_COD_CustomerDetail_Report"
-      }
-      const result = await mainAction.API_spCallServer(params, dispatch);
+        },
+          dispatch
+      );
       if (result.length > 0) {
         setdataDetail(result)
         setDisable(false)

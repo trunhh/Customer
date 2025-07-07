@@ -84,13 +84,12 @@ export const CustomerSenderComponent = () => {
   };
 
   const APIC_spCustomerSenderAddressList = async (ID) => {
-    const params = {
-      API_key: APIKey,
-      Json: '{"CustomerId":' + ID + "}",
-      func: "APIC_spCustomerSenderAddressList",
-    };
     // call redux saga
-    const data = await mainAction.API_spCallServer(params, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerSenderAddressList",
+      { CustomerId: ID },
+      dispatch
+    );
     debugger;
     if (data !== null) setNoResultMessage("");
     else setNoResultMessage("Không tìm thấy dữ liệu");
@@ -128,13 +127,11 @@ export const CustomerSenderComponent = () => {
   }
 
   const Delete = async (row) => {
-    let params = {
-      AppAPIKey: APIKey,
-      TokenDevices: TOKEN_DEVICE,
-      Json: '{"CustomerId":' + CustomerID + ',"AddressId":' + row._original.CustomerAddressSenderId + '}',
-      func: "APIC_spCustomerSenderAddressRemove",
-    };
-    const data = await mainAction.API_spCallServer(params, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerSenderAddressRemove",
+      { CustomerId: CustomerID, AddressId: row._original.CustomerAddressSenderId },
+      dispatch
+    );
     if (data.resultCode == 0) {
       setAddressList(AddressList.filter(p => p.CustomerAddressSenderId !== row._original.CustomerAddressSenderId));
       Alertsuccess(data.localMessage);
@@ -175,12 +172,11 @@ export const CustomerSenderComponent = () => {
           ", " +
           CityMeno
       };
-      const pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spCustomerSenderAddress_SaveJson",
-      };
-      // call redux saga
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerSenderAddress_SaveJson",
+      params,
+      dispatch
+    );
       Alertsuccess(data.localMessage);
       APIC_spCustomerSenderAddressList(CustomerID);
       PaginationTable();

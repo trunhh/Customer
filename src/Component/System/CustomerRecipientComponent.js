@@ -93,13 +93,12 @@ export const CustomerRecipientComponent = () => {
     setWardMeno(item.label);
 
     //Gọi api nạp danh sách địa chỉ cho khách lựa chọn
-    const params = {
-      Json: "[{\"WardId\":\"" + item.value + "\"}]",
-      func: "APIC_spCustomerRecipientGetByLocation",
-      API_key: APIKey,
-    };
     // call redux saga
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "APIC_spCustomerRecipientGetByLocation",
+      [{ WardId: item.value }],
+      dispatch
+    );
     setStreetList(result);
   };
 
@@ -126,13 +125,11 @@ export const CustomerRecipientComponent = () => {
   /* clear data on form when insert success */
 
   const APIC_spCustomerRecipientLoad = async () => {
-    const params = {
-      API_key: APIKey,
-      Json: '{"CustomerId":' + CustomerID + "}",
-      func: "APIC_spCustomerRecipientLoad",
-    };
-    // call redux saga
-    const data = await mainAction.API_spCallServer(params, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerRecipientLoad",
+      { CustomerId: CustomerID },
+      dispatch
+    );
     if (data !== null) setNoResultMessage("");
     else setNoResultMessage("Không tìm thấy dữ liệu");
     setAddressList(data);
@@ -165,12 +162,11 @@ export const CustomerRecipientComponent = () => {
       CustomerID: CustomerID,
       AddressId: item._original.Id,
     };
-    const pr = {
-      Json: JSON.stringify(params),
-      func: "APIC_spCustomerRecipientRemove_V1",
-    };
-    // call redux saga
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spCustomerRecipientRemove_V1",
+      params,
+      dispatch
+    );
     if (data.resultCode == 0) {
       setAddressList(AddressList.filter(p => p.Id !== item._original.Id));
       Alertsuccess(data.Message);
@@ -233,12 +229,11 @@ export const CustomerRecipientComponent = () => {
         Lat: GetLat,
         Lng: GetLng,
       };
-      const pr = {
-        API_key: APIKey,
-        json: JSON.stringify(params),
-        func: "APIC_spCustomerRecipientSaveJson",
-      };
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spCustomerRecipientSaveJson",
+          params,
+          dispatch
+      );
       Alertsuccess(data.localMessage);
       APIC_spCustomerRecipientLoad();
       setDisable(false);

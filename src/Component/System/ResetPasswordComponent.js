@@ -54,11 +54,11 @@ export const ResetPasswordComponent = () => {
     const keyDesc = await mainAction.DecryptString(pr, dispatch);
     if (keyDesc !== "") {
       var arr = keyDesc.split(";");
-      let params = {
-        Json: '{"CustomerID":"' + arr[0] + '"}',
-        func: "APIC_spCustomer_GetById",
-      };
-      const data = await mainAction.API_spCallServer(params, dispatch);
+      const data = await mainAction.API_spCallServer(
+        "APIC_spCustomer_GetById",
+        '{"CustomerID":"' + arr[0] + '"}',
+        dispatch
+      );
       if (data[0].CustomerCode == arr[1] && data[0].Password == arr[2]) {
         setCustomerID(arr[0]);
         setPassOld(arr[2]);
@@ -99,11 +99,11 @@ export const ResetPasswordComponent = () => {
       PasswordOld: PassOld,
     };
     if (KeyChangePass !== "" && CustomerID !== 0) {
-      let pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spCustomerResetPass_V2",
-      };
-      const data = await mainAction.API_spCallServer(pr, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spCustomerResetPass_V2",
+          params,
+          dispatch
+      );
       debugger;
       if (data != null) {
         Alertsuccess("Đổi mật khẩu thành công!");

@@ -68,13 +68,11 @@ export const LadingOutPrint = (SearchCode) => {
     const APIC_spLadingGetDataPrint = async (code) => {
         try {
             //Lấy thông tin vận đơn
-            let pr = {
-                Json: "{\"Code\":\"" + code + "\"}",
-                func: "APIC_spLading_Find",
-                API_key: APIKey,
-                TokenDevices: TOKEN_DEVICE,
-            };
-            const data = await mainAction.API_spCallServer(pr, dispatch);
+            const data = await mainAction.API_spCallServer(
+              "APIC_spLading_Find",
+              "{\"Code\":\"" + code + "\"}",
+              dispatch
+            );
             setItemPrint(data.Detail[0]);
             //#region Khởi tạo form in
             /* let html = $("#barcodeTarget").html();

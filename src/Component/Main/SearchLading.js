@@ -148,12 +148,11 @@ export const SearchLading = () => {
       Skip: 0,
       Take: 15000,
     };
-    let prList = {
-      Json: JSON.stringify(params),
-      func: "APIC_spLadingGetManyJsonAuto",
-      API_key: APIKey,
-    };
-    const data = await mainAction.API_spCallServer(prList, dispatch);
+    const data = await mainAction.API_spCallServer(
+        "APIC_spLadingGetManyJsonAuto",
+        params,
+        dispatch
+    );
     if (data.length > 0) {
       let dataExcel = data.map((item, index) => {
         return {
@@ -204,12 +203,12 @@ export const SearchLading = () => {
 
   //#region HÀM XÓA VẬN ĐƠN
   const CPN_spLading_Delete_All = async (item) => {
-    const params = {
-      json: '[{"Id":' + item._original.Id + ',"IsDelete":1}]',
-      func: "CPN_spLading_Delete_All",
-    };
     try {
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "CPN_spLading_Delete_All",
+        [{Id:item._original.Id,IsDelete:1}],
+        dispatch
+      );
       setdataLading(dataLading.filter((p) => p.Id !== item._original.Id));
       Alertsuccess(result.ReturnMess);
     } catch (err) {
@@ -264,12 +263,11 @@ export const SearchLading = () => {
       //#endregion Set status name cho tiêu đề
 
       //#region Đếm vận đơn theo Status
-      let pr = {
-        Json: JSON.stringify(params),
-        func: "APIC_spLading_SumByStatus",
-        API_key: APIKey,
-      };
-      const _count = await mainAction.API_spCallServer(pr, dispatch);
+      const _count = await mainAction.API_spCallServer(
+          "APIC_spLading_SumByStatus",
+          params,
+          dispatch
+      );
       _count.map((item, index) => {
         if (item.Status === 1) setStatus1(item.Total);
         if (item.Status === 2) setStatus2(item.Total);
@@ -287,12 +285,11 @@ export const SearchLading = () => {
       //#endregion Đếm vận đơn theo Status
 
       //#region Get danh sách vận đơn
-      let prList = {
-        Json: JSON.stringify(params),
-        func: "APIC_spLadingGetManyJsonAuto",
-        API_key: APIKey,
-      };
-      const data = await mainAction.API_spCallServer(prList, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spLadingGetManyJsonAuto",
+          params,
+          dispatch
+      );
       setdataLading(data);
       setDataPrint([]);
       setViewDetail(null);
@@ -953,12 +950,11 @@ export const SearchLading = () => {
 
     //#region in kiện A5+A4
     else if (Keys === 2) {
-      const params = {
-        Json: JSON.stringify(DataPrint),
-        func: "CPN_spLading_List_Detail",
-      };
-      debugger;
-      const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_List_Detail",
+      DataPrint,
+      dispatch
+    );
       debugger;
       await setHtmlPrint(
         DataPrint.map((v, index) => {
@@ -1231,11 +1227,11 @@ export const SearchLading = () => {
 
     //#region  in bill và kiện  A5+A4
     else if (Keys === 0) {
-      const params = {
-        Json: JSON.stringify(DataPrint),
-        func: "CPN_spLading_List_Detail",
-      };
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+          "CPN_spLading_List_Detail",
+          DataPrint,
+          dispatch
+      );
       await setHtmlPrint(
         DataPrint.map((item, index) => {
           let TotalNumber = result.filter((e) => e.Code === item.Code);
@@ -2642,12 +2638,11 @@ export const SearchLading = () => {
 
     //#region in kiện a6
     else if (Keys === 5) {
-      const params = {
-        Json: JSON.stringify(DataPrint),
-        func: "CPN_spLading_List_Detail",
-      };
-      debugger;
-      const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_List_Detail",
+      DataPrint,
+      dispatch
+    );
       debugger;
       await setHtmlPrint(
         DataPrint.map((v, index) => {
@@ -2910,12 +2905,11 @@ export const SearchLading = () => {
 
     //#region  in bill và kiện  a6
     else if (Keys === 4) {
-      const params = {
-        Json: JSON.stringify(DataPrint),
-        func: "CPN_spLading_List_Detail",
-      };
-      debugger;
-      const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_List_Detail",
+      DataPrint,
+      dispatch
+    );
       debugger;
       await setHtmlPrint(
         DataPrint.map((item, index) => {

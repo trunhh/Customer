@@ -73,13 +73,11 @@ export const PaymentReportComponent = () => {
       Year: parseInt(time[0])
     };
     debugger
-    let pr = {
-      Json: JSON.stringify(params),
-      func: "APIC_spPaymentReportJson",
-      API_key: APIKey,
-      TokenDevices: TOKEN_DEVICE,
-    };
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+      "APIC_spPaymentReportJson",
+      params,
+      dispatch
+    );
     setReportData(data);
     if (data.length === 0) setNoData("");
     else setNoData("display-none");
@@ -92,16 +90,13 @@ export const PaymentReportComponent = () => {
   const FRM_spPaymentRevenue_GetInvoice = async (code) => {
     try {
       setCode_Payment(code)
-      const params = {
-        Json: JSON.stringify({
-          BkpaymentCode: code
-        }),
-        func: "FRM_spPaymentRevenue_GetInvoice",
-        API_key: "netcoApikey2025"
-      }
       debugger
       mainAction.LOADING({ IsLoading: true }, dispatch);
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "FRM_spPaymentRevenue_GetInvoice",
+        { BkpaymentCode: code },
+        dispatch
+      );
       if (result.length != 0) {
         setDataGetInvoice(result)
         setDataGetInvoiceCheck(false)
@@ -129,12 +124,11 @@ export const PaymentReportComponent = () => {
         IsCheck: 0,
         KeyCheckPayment: 0
       }
-      const params = {
-        Json: JSON.stringify(pr),
-        func: "CPN_spGetBkPaymentCustomerDetailExport",
-        API_key: "netcoApikey2025"
-      }
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+          "CPN_spGetBkPaymentCustomerDetailExport",
+          pr,
+          dispatch
+      );
       if (result.length != 0) {
         setReportDataDetail(result)
         sethiddenmain(!hiddenmain)
@@ -251,12 +245,11 @@ export const PaymentReportComponent = () => {
       IsCheck: 0,
       KeyCheckPayment: 0
     }
-    const params = {
-      Json: JSON.stringify(pr),
-      func: "CPN_spGetBkPaymentCustomerDetailExport",
-      API_key: "netcoApikey2025"
-    }
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+        "CPN_spGetBkPaymentCustomerDetailExport",
+        pr,
+        dispatch
+    );
     //#region 
     let DataPrint = [],
       CustomerCode = "",

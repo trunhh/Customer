@@ -367,12 +367,11 @@ export const LadingCreateComponent = () => {
     };
 
     try {
-      let prList = {
-        Json: JSON.stringify(params),
-        func: "APIC_spLadingGetManyJsonAuto",
-        API_key: APIKey,
-      };
-      const data = await mainAction.API_spCallServer(prList, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "APIC_spLadingGetManyJsonAuto",
+          params,
+          dispatch
+      );
       setdataLading(data);
       //setDisable(false); // disable button
       setIsRunservice(1);
@@ -397,13 +396,12 @@ export const LadingCreateComponent = () => {
   //#region HÀM XÓA VẬN ĐƠN
 
   const CPN_spLading_Delete_All = async (item) => {
-    const params = {
-      AppAPIKey: APIKey,
-      json: "[{\"Id\":" + item._original.Id + ",\"IsDelete\":1}]",
-      func: "CPN_spLading_Delete_All",
-    };
     try {
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "CPN_spLading_Delete_All",
+        [{Id: item._original.Id, IsDelete:1}],
+        dispatch
+      );
       setdataLading(dataLading.filter((p) => p.Id !== item._original.Id));
       Alertsuccess(result.ReturnMess);
       //APIC_spLadingGetMany();
@@ -1032,11 +1030,11 @@ export const LadingCreateComponent = () => {
     let params1 = {
       Type: 1,
     };
-    let prList = {
-      Json: JSON.stringify(params1),
-      func: "APIC_spService_List",
-    };
-    const dataGTGT = await mainAction.API_spCallServer(prList, dispatch);
+    const dataGTGT = await mainAction.API_spCallServer(
+        "APIC_spService_List",
+        params1,
+        dispatch
+    );
     let arrGTGT = [];
     dataGTGT.map((item, index) => {
       item.checkboxGTGT = false;
@@ -1240,13 +1238,12 @@ export const LadingCreateComponent = () => {
       CityToName
     );
     //Gọi api nạp danh sách địa chỉ cho khách lựa chọn
-    const params = {
-      Json: "[{\"WardId\":\"" + item.value + "\"}]",
-      func: "APIC_spCustomerRecipientGetByLocation",
-      API_key: APIKey,
-    };
     // call redux saga
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+      "APIC_spCustomerRecipientGetByLocation",
+      [{WardId: item.value }],
+      dispatch
+    );
     setStreetList(result);
   };
 
@@ -1499,8 +1496,9 @@ export const LadingCreateComponent = () => {
           Quanlity: ProductQuality,
         });
       }
-      const params = {
-        Json: JSON.stringify({
+    const result = await mainAction.API_spCallServer(
+      "CPN_spLading_Save_V3",
+      {
           ListBill: [{
             // TokenDevices:TOKEN_DEVICE,
             Id: LadingId,
@@ -1594,13 +1592,9 @@ export const LadingCreateComponent = () => {
             Lng_Recipient: GetLng,
           }],
           Products: prd
-        }),
-        func: "CPN_spLading_Save",
-      };
-
-      console.log(params)
-      // call redux saga
-      const result = await mainAction.API_spCallServer(params, dispatch);
+        },
+      dispatch
+    );
       //Gọi send notify
       /* if ((LadingId ?? 0) === 0) { //Kiểm tra nếu thêm mới thì gửi notify
         const NotifiParam = {
@@ -1616,7 +1610,6 @@ export const LadingCreateComponent = () => {
             ],
           }),
           func: "APIC_spSendNotification",
-          API_key: APIKey,
         };
         const resultNotify = await mainAction.API_spCallServer(
           NotifiParam,
@@ -1665,12 +1658,11 @@ export const LadingCreateComponent = () => {
       Lat: GetLat,
       Lng: GetLng,
     };
-    const pr = {
-      API_key: APIKey,
-      json: JSON.stringify(params),
-      func: "APIC_spCustomerRecipientSaveJson",
-    };
-    const data = await mainAction.API_spCallServer(pr, dispatch);
+    const data = await mainAction.API_spCallServer(
+        "APIC_spCustomerRecipientSaveJson",
+        params,
+        dispatch
+    );
   };
 
 
@@ -1681,13 +1673,11 @@ export const LadingCreateComponent = () => {
   const APIC_spLadingEdit = async (row) => {
     try {
       //Lấy thông tin vận đơn
-      let pr = {
-        Json: "{\"LadingId\":" + row._original.Id + ",\"CustomerID\":" + Customer?.CustomerID + "}",
-        func: "APIC_spLading_Find",
-        API_key: APIKey,
-        TokenDevices: TOKEN_DEVICE,
-      };
-      const result = await mainAction.API_spCallServer(pr, dispatch);
+      const result = await mainAction.API_spCallServer(
+        "APIC_spLading_Find",
+        {LadingId:row._original.Id, CustomerID:Customer?.CustomerID},
+        dispatch
+      );
       let data = result.Detail[0];
       setshowingdetail(true); // open detail view
       setdisablerecipient();
@@ -1862,11 +1852,11 @@ export const LadingCreateComponent = () => {
 
     console.log(JSON.stringify(pr))
 
-    const params = {
-      Json: JSON.stringify(pr),
-      func: "CPN_spLocationCheckCustomer_V2",
-    };
-    const result = await mainAction.API_spCallServer(params, dispatch);
+    const result = await mainAction.API_spCallServer(
+        "CPN_spLocationCheckCustomer_V2",
+        pr,
+        dispatch
+    );
     console.log(result)
 
     await setOutlineSave(result);
@@ -1923,13 +1913,12 @@ export const LadingCreateComponent = () => {
       IsAPI: 1,
     };
     try {
-      const params = {
-        API_key: APIKey,
-        Json: JSON.stringify(pr),
-        func: "CPN_spLading_PriceMain",
-      };
       // call redux saga
-      const data = await mainAction.API_spCallServer(params, dispatch);
+      const data = await mainAction.API_spCallServer(
+          "CPN_spLading_PriceMain",
+          pr,
+          dispatch
+      );
       //let pricemain = data.length === 0 ? 18000 : parseInt(data);
       // let PriceNT = pricemain * OnSiteDeliveryPrice / 100;
       //  await setOutlineSave({ OnSiteDeliveryPrice: OnSiteDeliveryPrice, OnSiteDeliveryPriceMoney: PriceNT });
@@ -2009,12 +1998,11 @@ export const LadingCreateComponent = () => {
     setIsProtocol(_listServiceSelect.indexOf(";1;") !== -1 ? 1 : 0);
 
     try {
-      const params = {
-        API_key: APIKey,
-        Json: JSON.stringify([pr]),
-        func: "CPN_spLadingGetAnotherServiceMoney",
-      };
-      const result = await mainAction.API_spCallServer(params, dispatch);
+      const result = await mainAction.API_spCallServer(
+          "CPN_spLadingGetAnotherServiceMoney",
+          [pr],
+          dispatch
+      );
       const data = result[0];
       setDealine(FormatDateJson(data.DealineTime));
       setTHBBPrice(FormatMoney(data.THBBMoney, 0)); //  thu hồi bb
