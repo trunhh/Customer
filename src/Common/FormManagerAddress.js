@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from 'react-redux';
 import I18n from '../Language';
 import { mainAction } from '../Redux/Actions';
-import { SelectCity, SelectDistrict, SelectWard, SelectTypeAddress } from '.';
+import { SelectCity, SelectDistrict } from '.';
 import { Alertwarning, Alertsuccess, Alerterror, GetLatLngGoogle, RemoveAccents, RemoveExtraSpace, FormatDateJson, RegExpAddress, GetCookie } from '../Utils';
 import { withGoogleMap, withScriptjs, GoogleMap, Marker } from "react-google-maps";
 import $ from "jquery";
@@ -28,8 +28,6 @@ const _FormManagerAddress = ({
     const CityIdRef = useRef();
     const [DistrictId, setDistrictId] = useState({ value: 0, label: I18n.t('System.Select') });
     const DistrictIdRef = useRef();
-    const [WardId, setWardId] = useState({ value: 0, label: I18n.t('System.Select') });
-    const WardIdRef = useRef();
     const [NameAddress, setNameAddress] = useState('');
     const NameAddressRef = useRef();
     const [TypeAddress, setTypeAddress] = useState({ value: "", label: I18n.t('System.Select') });
@@ -63,7 +61,6 @@ const _FormManagerAddress = ({
         setFullAddress(
             RemoveExtraSpace(
                 (Streets === "" ? "" : Streets + ',')
-                + (WardId.value === 0 ? "" : WardId.label + ',')
                 + (DistrictId.value === 0 ? "" : DistrictId.label + ',')
                 + (CityId.value === 0 ? "" : CityId.label)
             )
@@ -84,7 +81,6 @@ const _FormManagerAddress = ({
         setTitle(I18n.t('Location.ManagerAddress'))
         setId(0);
         setDistrictId({ value: 0, label: I18n.t('System.Select') });
-        setWardId({ value: 0, label: I18n.t('System.Select') });
         setCityId({ value: 0, label: I18n.t('System.Select') });
         setNameAddress("");
         setStreets('');
@@ -110,8 +106,6 @@ const _FormManagerAddress = ({
                     ProvinceName: CityId.label,
                     DistrictId: DistrictId.value,
                     DistrictName: DistrictId.label,
-                    WardId: WardId.value,
-                    WardName: WardId.label,
                     TypeAddress: "Khác",
                     TimeDown: 10,
                     TimeSlotFrom: "06:00",
@@ -175,22 +169,12 @@ const _FormManagerAddress = ({
             return;
         }
         if (DistrictId.value === 0 || DistrictId.value === -1 || DistrictId.value === undefined) {
-            Alertwarning("Vui lòng chọn quận/huyện !");
-            DistrictIdRef.current.focus();
-            return;
-        }
-        if (WardId.value === 0 || WardId.value === -1 || WardId.value === undefined) {
             Alertwarning("Vui lòng chọn phường/xã !");
-            WardIdRef.current.focus();
+            DistrictIdRef.current.focus();
             return;
         }
         if (Streets === "") {
             Alertwarning("Vui lòng nhập số nhà/tên đường !");
-            StreetsRef.current.focus();
-            return;
-        }
-        if (RegExpAddress(FullAddress) === false) {
-            Alertwarning("Sai định dạng địa chỉ VD: Số nhà tên đường,phường xã,Quận huyện,Tỉnh thành !");
             StreetsRef.current.focus();
             return;
         }
@@ -292,8 +276,6 @@ const _FormManagerAddress = ({
                     setId(result[0].Id);
                     const a = (result[0].CodeAddress.trim()).split(result[0].TypeAddressCode + '-')
                     setCodeAddress(a[1]);
-                    //ward to district to city ewwww
-                    setWardId({ value: result[0].WardId, label: result[0].WardName });
                     setDistrictId({ value: result[0].DistrictId, label: result[0].DistrictName });
                     setCityId({ value: result[0].ProvinceId, label: result[0].ProvinceName });
                     setNameAddress(result[0].NameAddress);
@@ -342,8 +324,6 @@ const _FormManagerAddress = ({
                 setId(result[0].Id);
                 const a = (result[0].CodeAddress.trim()).split(result[0].TypeAddressCode + '-')
                 setCodeAddress(a[1]);
-                //ward to district to city ewwww
-                setWardId({ value: result[0].WardId, label: result[0].WardName });
                 setDistrictId({ value: result[0].DistrictId, label: result[0].DistrictName });
                 setCityId({ value: result[0].ProvinceId, label: result[0].ProvinceName });
                 setNameAddress(result[0].NameAddress);
@@ -439,8 +419,6 @@ const _FormManagerAddress = ({
         setId(result.Id);
         const a = (result.CodeAddress).split(result.TypeAddressCode + '-')
         setCodeAddress(a[1]);
-        //ward to district to city ewwww
-        setWardId({ value: result.WardId, label: result.WardName });
         setDistrictId({ value: result.DistrictId, label: result.DistrictName });
         setCityId({ value: result.ProvinceId, label: result.ProvinceName });
         setNameAddress(result.NameAddress);
@@ -511,16 +489,6 @@ const _FormManagerAddress = ({
                                             EnterCode(e, 1);
                                         }}
                                     />
-                                    <div class={ShowReset === true ? "input-group-prepend" : "display-none"} >
-                                        <button
-                                            type="button"
-                                            style={{ borderTopRightRadius: "0.25rem", borderBottomRightRadius: "0.25rem" }}
-                                            class="btn btn-cancel pull-right btn-xs"
-                                            onClick={e => RenderCode({ code: WardId.code })}
-                                        >
-                                            Reset
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -539,7 +507,6 @@ const _FormManagerAddress = ({
                                     onSelected={e => {
                                         setCityId(e)
                                         setDistrictId({ value: 0, label: I18n.t('System.Select') })
-                                        setWardId({ value: 0, label: I18n.t('System.Select') })
                                         setFullCheck(FullCheck + 1)
                                     }}
                                     ref={CityIdRef}
@@ -549,7 +516,7 @@ const _FormManagerAddress = ({
                         </div>
                         <div class="col-sm-12 col-md-4">
                             <div class="form-group">
-                                <label class="label">Quận huyện <span className="red">(*)</span></label>
+                                <label class="label">Phường xã <span className="red">(*)</span></label>
                                 <SelectDistrict
                                     ParentID={CityId.value}
                                     ref={DistrictIdRef}
@@ -557,23 +524,7 @@ const _FormManagerAddress = ({
                                     onSelected={e => {
                                         setDistrictId(e)
                                         setFullCheck(FullCheck + 1)
-                                        setWardId({ value: 0, label: I18n.t('System.Select') })
 
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <div class="form-group">
-                                <label class="label">Phường xã<span className="red">(*)</span></label>
-                                <SelectWard
-                                    ParentID={DistrictId.value}
-                                    ref={WardIdRef}
-                                    onActive={WardId.value}
-                                    onSelected={e => {
-                                        setWardId(e)
-                                        setFullCheck(FullCheck + 1)
-                                        RenderCode(e)
                                     }}
                                 />
                             </div>

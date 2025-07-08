@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useCookies } from "react-cookie";
 import { Link, useHistory } from "react-router-dom";
 import { useInput } from "../../Hooks";
 import { GoogleLogin } from 'react-google-login';
 import {
   SelectCity,
   SelectDistrict,
-  SelectWard,
-  Avarta,
 } from "../../Common";
 import { Alertsuccess, Alerterror, DecodeString, GetCookie, GetCookieGroup } from "../../Utils";
 
@@ -56,8 +52,6 @@ export const ProfiveComponent = () => {
 
   const [District, setDistrict] = useState(GetCookie("District"));
 
-  const [Ward, setWard] = useState(GetCookie("Ward"));
-
   const [Avatar, setAvatar] = useState(GetCookie("LinkAvatar"));
   const [FileUpload, setFileUpload] = useState({});
 
@@ -79,11 +73,6 @@ export const ProfiveComponent = () => {
   const onChooseDistrict = (item) => {
     //setDistrictMeno(item);
     setDistrict(item.value);
-  };
-
-  const onSelectWard = (item) => {
-    //setWardMeno(item);
-    setWard(item.value);
   };
   /* clear data on form when insert success */
 
@@ -111,9 +100,6 @@ export const ProfiveComponent = () => {
       Alerterror("Vui lòng chọn Tỉnh thành");
       return;
     } else if (District === 0) {
-      Alerterror("Vui lòng chọn Quận huyện");
-      return;
-    } else if (Ward === 0) {
       Alerterror("Vui lòng chọn Phường xã");
       return;
     } else {
@@ -130,7 +116,6 @@ export const ProfiveComponent = () => {
         Address: Address,
         City: City,
         District: District,
-        Ward: Ward,
         BankNumber: BankNumber == null ? "" : BankNumber,
         BankNumberName: BankNumberName == null ? "" : BankNumberName,
         BankName: BankName == null ? "" : BankName,
@@ -150,7 +135,6 @@ export const ProfiveComponent = () => {
       Customer.Address = Address;
       Customer.City = City;
       Customer.District = District;
-      Customer.Ward = Ward;
       Customer.BankNumber = BankNumber;
       Customer.BankNumberName = BankNumberName;
       Customer.BankName = BankName;
@@ -232,10 +216,8 @@ export const ProfiveComponent = () => {
         Company: _customer.CustomerCompany,
         City: _customer.City,
         District: _customer.District,
-        Ward: _customer.Ward,
         CityName: _customer.CityName,
         DistrictName: _customer.DistrictName,
-        WardName: _customer.WardName,
         Verification: _customer.Verification,
         CustomerGroupId: _customer.CustomerGroupId,
         PostOfficeId: _customer.PostOfficeId,
@@ -454,24 +436,12 @@ export const ProfiveComponent = () => {
               </div>
               <div className="col-md-4">
                 <div className="form-group mt0">
-                  <label className="bmd-label-static">Quận/huyện <span className="red">(*)</span></label>
+                  <label className="bmd-label-static">Phường/xã <span className="red">(*)</span></label>
                   <SelectDistrict
                     onActive={District}
                     ParentID={City}
                     onSelected={(item) => {
                       onChooseDistrict(item);
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group mt0">
-                  <label className="bmd-label-static">Phường/xã <span className="red">(*)</span></label>
-                  <SelectWard
-                    onActive={Ward}
-                    ParentID={District}
-                    onSelected={(item) => {
-                      onSelectWard(item);
                     }}
                   />
                 </div>

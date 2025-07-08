@@ -1,6 +1,5 @@
 export * from './SelectCity';
 export * from './SelectDistrict';
-export * from './SelectWard';
 export * from './SelectSender';
 export * from './SelectRecipient';
 export * from './LoadingAlert';

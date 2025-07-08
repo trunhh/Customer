@@ -370,7 +370,7 @@ export const PaymentReportComponent = () => {
             <td style={{ marginLeft: "10px", width: "100%", position: "relative", verticalAlign: "top" }}>
               <table style={{ fontSize: "12px", width: "100%", marginLeft: "10px" }}>
                 <tr><td style={{ textAlign: "center" }}><b>CÔNG TY CỔ PHẦN THƯƠNG MẠI & CHUYỂN PHÁT NHANH NỘI BÀI</b></td></tr>
-                <tr><td style={{ textAlign: "center" }}><b>Địa chỉ : Tầng 8, Tháp B, Tòa nhà Sông Đà, Phường Mỹ Đình, Quận Nam Từ Liêm, Hà Nội</b></td></tr>
+                <tr><td style={{ textAlign: "center" }}><b>Địa chỉ : Tầng 8, Tháp B, Tòa nhà Sông Đà, Nam Từ Liêm, Hà Nội</b></td></tr>
                 <tr><td style={{ textAlign: "center" }}><b>Email : <i>info@netco.com.vn</i> - Website: <i>www.netco.com.vn</i> - Hotline : <i>19006463</i></b></td></tr>
               </table>
             </td>

@@ -82,7 +82,7 @@ export const LadingExcelComponent = () => {
         try {
           let _rowIndex = 1;
           data.forEach((element, index) => {
-            if (index === 0 && element.__EMPTY_56 !== "Mã xã") {
+            if (index === 0 && element.__EMPTY_56 !== "Mã p/xã") {
               mainAction.LOADING({ IsLoading: false }, dispatch);
               Alerterror(
                 "File mẫu excel đã được cập nhật để bổ sung thêm nhiều sản phẩm cho đơn hàng. Vui lòng tải file mẫu mới !"
@@ -105,8 +105,8 @@ export const LadingExcelComponent = () => {
                   CustomerCode: GetCookie("CustomerCode"), // Mã khách hàng
                   RecipientAddress: element.__EMPTY_1, // Địa chỉ
                   CityRecipientNameTo: element.__EMPTY_2, // Tên tỉnh đến
-                  DistrictNameTo: element.__EMPTY_3, // Tên huyện đến
-                  WardsNameTo: element.__EMPTY_4, // Tên phường xã đến
+                  DistrictNameTo: element.__EMPTY_3, // Tên xã đến
+                  WardsNameTo: element.__EMPTY_4, // Tên p/xã đến
                   RecipientName: element.__EMPTY_5, // Tên người nhận
                   RecipientPhone: element.__EMPTY_6, // SĐT NG nhận
                   RecipientCompany: element.__EMPTY_7, // Cty Người nhận

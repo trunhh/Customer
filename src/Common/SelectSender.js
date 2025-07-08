@@ -21,18 +21,16 @@ const SelectSenderComp = React.forwardRef(({
   const [CustomerID, setCustomerID] = useState(GetCookie("CustomerID"));
   const [_default, setDefault] = useState({
     value: 0,
-    label: defaultLabel===""?(Customer?.CustomerName + " - " + Customer?.Phone + " - " + Customer?.Address + ", "+ Customer?.WardName + ", "+ Customer?.DistrictName + ", "+ Customer?.CityName):defaultLabel,
+    label: defaultLabel===""?(Customer?.CustomerName + " - " + Customer?.Phone + " - " + Customer?.Address + ", "+ Customer?.DistrictName + ", "+ Customer?.CityName):defaultLabel,
     obj: {
       CityId: Customer?.City,
       DistrictiId: Customer?.District,
-      WarId: Customer?.Ward,
       Code_Local: Customer?.Code_Local,
       CityName: Customer?.CityName,
       DistrictyName: Customer?.DistrictName,
-      WarName: Customer?.WardName,
       NameSend: Customer?.CustomerName,
       PhoneSend: Customer?.Phone,
-      AddressFull: Customer?.Address  + ", " + Customer?.WardName + ", "+ Customer?.DistrictName + ", "+ Customer?.CityName,
+      AddressFull: Customer?.Address  +", "+ Customer?.DistrictName + ", "+ Customer?.CityName,
       Street_Number: Customer?.Address,
       State: 0
     }

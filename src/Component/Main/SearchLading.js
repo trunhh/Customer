@@ -107,8 +107,7 @@ export const SearchLading = () => {
           "Hình thức thanh toán": item.PaymentString,
           "Tỉnh đi": item.CitySendCode,
           "Tỉnh đến": item.CityRecipientCode,
-          "Quận,huyện đến": item.District,
-          "Phường,xã đến": item.Wards,
+          "Phường,xã đến": item.District,
           "Dịch vụ": item.ServiceName,
           "Người nhận": item.RecipientName,
           "SĐT người nhận": item.RecipientPhone,
@@ -173,8 +172,7 @@ export const SearchLading = () => {
           "Hình thức thanh toán": item.PaymentString,
           "Tỉnh đi": item.CitySendCode,
           "Tỉnh đến": item.CityRecipientCode,
-          "Quận,huyện đến": item.District,
-          "Phường,xã đến": item.Wards,
+          "Phường,xã đến": item.District,
           "Dịch vụ": item.ServiceName,
           "Người nhận": item.RecipientName,
           "SĐT người nhận": item.RecipientPhone,
@@ -862,14 +860,7 @@ export const SearchLading = () => {
                           <b
                             style={{ display: "inline-block", width: "250px" }}
                           >
-                            - Phường/Xã <i>(Ward/Commune)</i>
-                          </b>
-                          : {item.Wards}
-                          <br />
-                          <b
-                            style={{ display: "inline-block", width: "250px" }}
-                          >
-                            - Quận/Huyện <i>(District)</i>
+                            - Phường/Xã <i>(District)</i>
                           </b>
                           : {item.District}
                           <br />
@@ -1748,17 +1739,7 @@ export const SearchLading = () => {
                                   width: "250px",
                                 }}
                               >
-                                - Phường/Xã <i>(Ward/Commune)</i>
-                              </b>
-                              : {item.Wards}
-                              <br />
-                              <b
-                                style={{
-                                  display: "inline-block",
-                                  width: "250px",
-                                }}
-                              >
-                                - Quận/Huyện <i>(District)</i>
+                                - Phường/Xã <i>(District)</i>
                               </b>
                               : {item.District}
                               <br />
@@ -3947,20 +3928,8 @@ export const SearchLading = () => {
       ),
     },
     {
-      Header: "Quận,Huyện đến",
+      Header: "Phường,Xã đến",
       accessor: "District",
-      Filter: ({ filter, onChange }) => (
-        <input
-          onChange={(event) => onChange(event.target.value)}
-          value={filter ? filter.value : ""}
-          placeholder="Tìm kiếm ..."
-          className="form-control"
-        />
-      ),
-    },
-    {
-      Header: "Phường,xã đến",
-      accessor: "Wards",
       Filter: ({ filter, onChange }) => (
         <input
           onChange={(event) => onChange(event.target.value)}

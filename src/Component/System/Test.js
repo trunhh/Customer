@@ -4,8 +4,7 @@ import DateTimePicker from "react-datetime-picker";
 import {
   SelectCity,
   FormReport,
-  SelectDistrict,
-  SelectWard,
+  SelectDistrict
 } from "../../Common";
 import {
   Alertsuccess,
@@ -56,10 +55,6 @@ export const Test = () => {
   const onUpdateCityID = (item) => {
     Location.updateCityID(item.value, dispatch);
     IsLoad === false ? setIsLoad(true) : setIsLoad(false);
-    console.log(item);
-  };
-
-  const onSelectWard = (item) => {
     console.log(item);
   };
 
@@ -218,7 +213,7 @@ export const Test = () => {
                             className="bmd-label-floating"
                             style={{ marginTop: "20%" }}
                           >
-                            Quận:
+                            Phường:
                           </label>
                         </div>
                         <div className="col-md-8">
@@ -227,29 +222,6 @@ export const Test = () => {
                               IsLoad={IsLoad}
                               onSelected={(item) => {
                                 onChooseDistrict(item);
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-md-4">
-                      <div className="row">
-                        <div className="col-md-4">
-                          <label
-                            className="bmd-label-floating"
-                            style={{ marginTop: "20%" }}
-                          >
-                            Phường:
-                          </label>
-                        </div>
-                        <div className="col-md-8">
-                          <div className="form-group bmd-form-group">
-                            <SelectWard
-                              IsLoad={IsLoadDistrict}
-                              onSelected={(item) => {
-                                onSelectWard(item);
                               }}
                             />
                           </div>

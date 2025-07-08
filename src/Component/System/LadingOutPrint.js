@@ -216,9 +216,7 @@ export const LadingOutPrint = (SearchCode) => {
                                 <br />
                                 <b style={{ display: "inline-block", width: "250px" }}>- Số nhà, đường <i>(No., Street)</i></b>: {item.Street !== undefined ? item.Street : item.RecipientAddress}
                                 <br />
-                                <b style={{ display: "inline-block", width: "250px" }}>- Phường/Xã <i>(Ward/Commune)</i></b>: {item.Wards}
-                                <br />
-                                <b style={{ display: "inline-block", width: "250px" }}>- Quận/Huyện <i>(District)</i></b>: {item.District}
+                                <b style={{ display: "inline-block", width: "250px" }}>- Phường/Xã <i>(District)</i></b>: {item.District}
                                 <br />
                                 <b style={{ display: "inline-block", width: "255px" }}>- Tỉnh/TP <i>(Province/City)</i></b>: {item.CityRecipientCode}
                             </td>

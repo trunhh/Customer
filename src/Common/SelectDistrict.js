@@ -10,7 +10,7 @@ const SelectDistrictComp = React.forwardRef(({
 }, ref) => {
   const [data, setData] = useState([]);
   const [valueS, setValueS] = useState({});
-  const [_default, setDefault] = useState({ value: 0, label: "Chọn quận huyện" });
+  const [_default, setDefault] = useState({ value: 0, label: "Chọn phường xã" });
   const onSelecteItem = (item) => {
     onSelected(item);
     setValueS(item);

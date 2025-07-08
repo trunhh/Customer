@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useInput } from "../../Hooks";
 
-import { SelectCity, SelectDistrict, SelectWard } from "../../Common";
+import { SelectCity, SelectDistrict } from "../../Common";
 import {
   Alertsuccess,
   Alerterror,
@@ -14,7 +14,6 @@ import {
   GetCookieGroup
 } from "../../Utils";
 
-import { CustomerAction } from "../../Redux/Actions/Main";
 import { APIKey, TOKEN_DEVICE } from "../../Services/Api";
 import { mainAction } from "../../Redux/Actions";
 import { DataTable } from "../../Common/DataTable";
@@ -31,10 +30,8 @@ export const CustomerRecipientComponent = () => {
   const [AddressId, setAddressId] = useState(0);
   const [City, setCity] = useState(0);
   const [District, setDistrict] = useState(0);
-  const [Ward, setWard] = useState(0);
   const [CityMeno, setCityMeno] = useState("");
   const [DistrictMeno, setDistrictMeno] = useState("");
-  const [WardMeno, setWardMeno] = useState("");
 
   const [Name, bindName, setName] = useInput("");
   const NameRef = useRef();
@@ -76,27 +73,23 @@ export const CustomerRecipientComponent = () => {
     setCityMeno(item.label);
     setDistrict(0);
     setDistrictMeno("");
-    setWard(0);
-    setWardMeno("");
   };
 
   const onChooseDistrict = (item) => {
     setDistrict(item.value);
     setDistrictMeno(item.label);
-    setWard(0);
-    setWardMeno("");
   };
 
   const [StreetList, setStreetList] = useState([]);
-  const onSelectWard = async (item) => {
-    setWard(item.value);
-    setWardMeno(item.label);
+  const onSelectDistrict = async (item) => {
+    setDistrict(item.value);
+    setDistrictMeno(item.label);
 
     //Gọi api nạp danh sách địa chỉ cho khách lựa chọn
     // call redux saga
     const result = await mainAction.API_spCallServer(
       "APIC_spCustomerRecipientGetByLocation",
-      [{ WardId: item.value }],
+      [{ DistrictId: item.value }],
       dispatch
     );
     setStreetList(result);
@@ -144,12 +137,10 @@ export const CustomerRecipientComponent = () => {
     setStreet(item._original.Street);
     setCity(item._original.CityId);
     setDistrict(item._original.DistrictId);
-    setWard(item._original.WardId);
     setCityMeno(item._original.City);
     setDistrictMeno(item._original.District);
-    setWardMeno(item._original.Ward);
     setCompany(item._original.Company);
-    setAddressOld(item._original.Street + ", " + item._original.Ward + ", " + item._original.District + ", " + item._original.City);
+    setAddressOld(item._original.Street + ", " + item._original.District + ", " + item._original.City);
     setLat(item._original.Lat);
     setLng(item._original.Lng);
     setShowForm(true);
@@ -176,7 +167,7 @@ export const CustomerRecipientComponent = () => {
 
   const APIC_spCustomerRecipientSave = async () => {
     setDisable(true);
-    let GetLat = Lat, GetLng = Lng, Address = Street + ", " + WardMeno + ", " + DistrictMeno + ", " + CityMeno;
+    let GetLat = Lat, GetLng = Lng, Address = Street + ", " + DistrictMeno + ", " + CityMeno;
     if (Name === "")
       Alerterror("Nhập họ tên");
     else if (Phone === "")
@@ -186,8 +177,6 @@ export const CustomerRecipientComponent = () => {
     else if (City === undefined || City == 0)
       Alerterror("Chọn tỉnh thành");
     else if (District === undefined || District == 0)
-      Alerterror("Chọn quận huyện");
-    else if (Ward === undefined || Ward == 0)
       Alerterror("Chọn phường xã");
     else if (Street === "")
       Alerterror("Nhập số nhà, đường");
@@ -214,14 +203,10 @@ export const CustomerRecipientComponent = () => {
         City: CityMeno,
         DistrictId: District,
         District: DistrictMeno,
-        WardId: Ward,
-        Ward: WardMeno,
         Street: Street,
         Company: Company,
         Address:
           Street +
-          ", " +
-          WardMeno +
           ", " +
           DistrictMeno +
           ", " +
@@ -270,10 +255,8 @@ export const CustomerRecipientComponent = () => {
   const ClearForm = () => {
     setCity(0);
     setDistrict(0);
-    setWard(0);
     setCityMeno("");
     setDistrictMeno("");
-    setWardMeno("");
     setName("");
     setPhone("");
     setStreet("");
@@ -447,27 +430,13 @@ export const CustomerRecipientComponent = () => {
                       <div className="col-md-4">
                         <div className="form-group">
                           <label className="bmd-label-static">
-                            Quận/huyện <span className="red">(*)</span>
+                            Phường/xã <span className="red">(*)</span>
                           </label>
                           <SelectDistrict
                             onActive={District}
                             ParentID={City}
                             onSelected={(item) => {
-                              onChooseDistrict(item);
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="bmd-label-static">
-                            Phường/xã <span className="red">(*)</span>
-                          </label>
-                          <SelectWard
-                            onActive={Ward}
-                            ParentID={District}
-                            onSelected={(item) => {
-                              onSelectWard(item);
+                              onSelectDistrict(item);
                             }}
                           />
                         </div>

@@ -191,7 +191,7 @@ const LadingDetailComp = ({
               </div>
               <div className="col-md-12 col-xs-12">
                 {/*  <i className="fa fa-map-marker iwidth"></i> */}
-                <span className="colortext"> Huyện đi: </span>
+                <span className="colortext"> Xã đi: </span>
                 <span className="sender-address noted">
                   {Detail.DistrictName_From}
                 </span>
@@ -265,16 +265,9 @@ const LadingDetailComp = ({
               </div>
               <div className="col-md-12 col-xs-12">
                 {/*  <i className="fa fa-map-marker iwidth"></i> */}
-                <span className="colortext"> Huyện đến: </span>
+                <span className="colortext"> Xã đến: </span>
                 <span className="recipient-company noted">
                   {Detail.District}
-                </span>
-              </div>
-              <div className="col-md-12 col-xs-12">
-                {/*     <i className="fa fa-map-marker iwidth"></i> */}
-                <span className="colortext"> Phường xã đến: </span>
-                <span className="recipient-company noted">
-                  {Detail.Wards}
                 </span>
               </div>
               <div className="col-md-12 col-xs-12">

@@ -141,10 +141,7 @@ const PrintTempComp = ({ data, sheetprint }) => {
                                 <b style="display: inline-block;width:250px"><b>- Số nhà, đường <i>(No., Street)</i></b></b>: ${
                                   item.Street!==undefined?item.Street:item.RecipientAddress
                                 }<br />
-                                <b style="display: inline-block;width:250px"><b>- Phường/Xã <i>(Ward/Commune)</i></b></b>: ${
-                                  item.Wards
-                                }<br />
-                                <b style="display: inline-block;width:250px"><b>- Quận/Huyện <i>(District)</i></b></b>: ${
+                                <b style="display: inline-block;width:250px"><b>- Phường/Xã <i>(District)</i></b></b>: ${
                                   item.District
                                 }<br />
                                 <b style="display: inline-block; width: 255px;"><b>- Tỉnh/TP <i>(Province/City)</i></b></b>: ${

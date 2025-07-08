@@ -1,24 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { useCookies } from "react-cookie";
 import { Link, useHistory } from "react-router-dom";
 import { useInput } from "../../Hooks";
 
-import { SelectCity, SelectDistrict, SelectWard, Avarta, NoCustomer } from "../../Common";
+import { SelectCity, SelectDistrict, NoCustomer } from "../../Common";
 import {
-  Alertsuccess,
   Alerterror,
-  DecodeString,
   FormatMoney,
   FormatDateJson,
-  GetCookieValue,
   GetCookie,
   GetCookieGroup,
 } from "../../Utils";
 
 import { mainAction } from "../../Redux/Actions";
-import { Location, Lading } from "../../Redux/Actions/Category";
-import { APIKey, TOKEN_DEVICE } from "../../Services/Api";
 import LayoutMain from "../../Layout/LayoutMain";
 
 /* Load CSS */
@@ -38,16 +32,11 @@ export const LadingGetPriceComponent = () => {
 
   const [CityMeno, setCityMeno] = useState(0);
   const [DistrictMeno, setDistrictMeno] = useState(0);
-  const [WardMeno, setWardMeno] = useState(0);
   const [CityMenoName, setCityMenoName] = useState("");
   const [DistrictMenoName, setDistrictMenoName] = useState("");
-  const [WardMenoName, setWardMenoName] = useState("");
 
   const [Weight, bindWeight, setWeight] = useInput("");
   const WeightRef = useRef();
-
-  const [COD, bindCOD, setCOD] = useInput(0);
-  const CODRef = useRef();
   /* run after render as document.ready */
   useEffect(() => {
     //GET CUSTOMER INFO FROM COOKIE
@@ -72,20 +61,11 @@ export const LadingGetPriceComponent = () => {
     setCityMenoName(item.label);
     setDistrictMeno(0);
     setDistrictMenoName("");
-    setWardMeno(0);
-    setWardMenoName("");
   };
 
   const onChooseDistrict = (item) => {
     setDistrictMeno(item.value);
     setDistrictMenoName(item.label);
-    setWardMeno(0);
-    setWardMenoName("");
-  };
-
-  const onChooseWard = (item) => {
-    setWardMeno(item.value);
-    setWardMenoName(item.label);
   };
 
   /* clear data on form when insert success */
@@ -94,7 +74,6 @@ export const LadingGetPriceComponent = () => {
     setDistrictFromMeno(0);
     setCityMeno(0);
     setDistrictMeno(0);
-    setWardMeno(0);
     setWeight("");
     setDisable(false);
   };
@@ -108,7 +87,7 @@ export const LadingGetPriceComponent = () => {
       DistrictFromMeno === 0 ||
       DistrictFromMeno === undefined
     ) {
-      Alerterror("Vui lòng chọn Quận huyện gửi");
+      Alerterror("Vui lòng chọn Phường xã gửi");
       return;
     } else if (Weight === "") {
       Alerterror("Vui lòng nhập trọng lượng");
@@ -117,9 +96,6 @@ export const LadingGetPriceComponent = () => {
       Alerterror("Vui lòng chọn Tỉnh thành nhận");
       return;
     } else if (DistrictMeno === 0 || DistrictMeno === undefined) {
-      Alerterror("Vui lòng chọn Quận huyện nhận");
-      return;
-    } else if (WardMeno === 0 || WardMeno === undefined) {
       Alerterror("Vui lòng chọn Phường xã nhận");
       return;
     }
@@ -130,7 +106,6 @@ export const LadingGetPriceComponent = () => {
       CityGoId: CityFromMeno,
       CityToId: CityMeno,
       DistrictTo: DistrictMeno,
-      WardToId: WardMeno,
       Weight: parseFloat(Weight),
       PostOffice_Id: GetCookie("PostOfficeId"),
     };
@@ -166,9 +141,7 @@ export const LadingGetPriceComponent = () => {
       CityTo: CityMeno,
       CityToName: CityMenoName,
       DistrictTo: DistrictMeno,
-      DistrictToName: DistrictMenoName,
-      WardTo: WardMeno,
-      WardToName: WardMenoName
+      DistrictToName: DistrictMenoName
     };
     localStorage.setItem("LadingDraft", JSON.stringify(draff));
     history.push("tao-nhanh-van-don");
@@ -201,7 +174,7 @@ export const LadingGetPriceComponent = () => {
                   </div>
                   <div className="row mb5">
                     <label className="col-md-12 mt10">
-                      Quận/huyện <span className="red">(*)</span>
+                      Phường/xã <span className="red">(*)</span>
                     </label>
                     <div className="col-md-12">
                       <SelectDistrict
@@ -257,7 +230,7 @@ export const LadingGetPriceComponent = () => {
                   </div>
                   <div className="row mb5">
                     <label className="col-md-12 mt10">
-                      Quận/huyện <span className="red">(*)</span>
+                      Phường/xã <span className="red">(*)</span>
                     </label>
                     <div className="col-md-12">
                       <SelectDistrict
@@ -265,20 +238,6 @@ export const LadingGetPriceComponent = () => {
                         ParentID={CityMeno}
                         onSelected={(item) => {
                           onChooseDistrict(item);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="row mb5">
-                    <label className="col-md-12 mt10">
-                      Phường/xã <span className="red">(*)</span>
-                    </label>
-                    <div className="col-md-12">
-                      <SelectWard
-                        onActive={WardMeno}
-                        ParentID={DistrictMeno}
-                        onSelected={(item) => {
-                          onChooseWard(item);
                         }}
                       />
                     </div>

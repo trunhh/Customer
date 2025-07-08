@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useInput } from "../../Hooks";
 
-import { SelectCity, SelectDistrict, SelectWard } from "../../Common";
+import { SelectCity, SelectDistrict } from "../../Common";
 import {
   Alertsuccess,
   Alerterror,
@@ -13,7 +13,6 @@ import {
   GetCookieGroup,
 } from "../../Utils";
 
-import { APIKey, TOKEN_DEVICE } from "../../Services/Api";
 import { mainAction } from "../../Redux/Actions";
 import { DataTable } from "../../Common/DataTable";
 import LayoutMain from "../../Layout/LayoutMain";
@@ -31,10 +30,8 @@ export const CustomerSenderComponent = () => {
 
   const [City, setCity] = useState(0);
   const [District, setDistrict] = useState(0);
-  const [Ward, setWard] = useState(0);
   const [CityMeno, setCityMeno] = useState("");
   const [DistrictMeno, setDistrictMeno] = useState("");
-  const [WardMeno, setWardMeno] = useState("");
 
   const [Name, bindName, setName] = useInput("");
   const NameRef = useRef();
@@ -67,21 +64,14 @@ export const CustomerSenderComponent = () => {
     setCityMeno(item.label);
     setDistrict(0);
     setDistrictMeno("");
-    setWard(0);
-    setWardMeno("");
+
   };
 
   const onChooseDistrict = (item) => {
     setDistrict(item.value);
     setDistrictMeno(item.label);
-    setWard(0);
-    setWardMeno("");
   };
 
-  const onSelectWard = (item) => {
-    setWard(item.value);
-    setWardMeno(item.label);
-  };
 
   const APIC_spCustomerSenderAddressList = async (ID) => {
     // call redux saga
@@ -118,10 +108,8 @@ export const CustomerSenderComponent = () => {
     setStreet(item._original.Street_Number);
     setCity(item._original.CityId);
     setDistrict(item._original.DistrictiId);
-    setWard(item._original.WarId);
     setCityMeno(item._original.CityName);
     setDistrictMeno(item._original.DistrictyName);
-    setWardMeno(item._original.WarName);
     setCompany(item._original.Company);
     setShowForm(true);
   }
@@ -149,8 +137,6 @@ export const CustomerSenderComponent = () => {
     else if (City === undefined || City == 0)
       Alerterror("Chọn tỉnh thành");
     else if (District === undefined || District == 0)
-      Alerterror("Chọn quận huyện");
-    else if (Ward === undefined || Ward == 0)
       Alerterror("Chọn phường xã");
     else if (Street === "") Alerterror("Nhập số nhà, đường");
     else {
@@ -161,12 +147,9 @@ export const CustomerSenderComponent = () => {
         PhoneSend: Phone,
         CityId: City,
         DistrictId: District,
-        WardId: Ward,
         Street_Number: Street,
         AddressFull:
           Street +
-          ", " +
-          WardMeno +
           ", " +
           DistrictMeno +
           ", " +
@@ -201,10 +184,8 @@ export const CustomerSenderComponent = () => {
   const ClearForm = () => {
     setCity(0);
     setDistrict(0);
-    setWard(0);
     setCityMeno("");
     setDistrictMeno("");
-    setWardMeno("");
     setName("");
     setPhone("");
     setStreet("");
@@ -367,27 +348,13 @@ export const CustomerSenderComponent = () => {
                       <div className="col-md-4">
                         <div className="form-group">
                           <label className="bmd-label-static">
-                            Quận/huyện <span className="red">(*)</span>
+                            Phường/xã <span className="red">(*)</span>
                           </label>
                           <SelectDistrict
                             onActive={District}
                             ParentID={City}
                             onSelected={(item) => {
                               onChooseDistrict(item);
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="bmd-label-static">
-                            Phường/xã <span className="red">(*)</span>
-                          </label>
-                          <SelectWard
-                            onActive={Ward}
-                            ParentID={District}
-                            onSelected={(item) => {
-                              onSelectWard(item);
                             }}
                           />
                         </div>

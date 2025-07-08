@@ -4,7 +4,6 @@ import {
   SelectCity,
   SelectService,
   SelectDistrict,
-  SelectWard,
   SelectSender,
   LadingDetail,
   SelectRecipient,
@@ -33,7 +32,7 @@ import LayoutMain from "../../Layout/LayoutMain";
 
 export const LadingCreateComponent = () => {
   useEffect(() => {
-    if (Customer === null || Customer === {}) {
+    if (Customer === null) {
       history.push("/");
     }
   }, []);
@@ -75,9 +74,7 @@ export const LadingCreateComponent = () => {
       CityName: Customer?.CityName,
       DistrictiId: Customer?.District,
       DistrictyName: Customer?.DistrictName,
-      WarId: Customer?.Ward,
-      WarName: Customer?.WardName,
-      Street_Number: Customer?.Address.replaceAll(", " + Customer?.Ward, "").replaceAll(", " + Customer?.District, "").replaceAll(", " + Customer?.City, "")
+      Street_Number: Customer?.Address.replaceAll(", " + Customer?.District, "").replaceAll(", " + Customer?.City, "")
     }
   });
   const [SenderName, bindSenderName, setSenderName] = useInput(
@@ -102,12 +99,6 @@ export const LadingCreateComponent = () => {
   const [DistrictFromName, setDistrictFromName] = useState(
     Customer?.DistrictName
   );
-  const [WardFrom, setWardFrom] = useState(
-    Customer?.Ward
-  );
-  const [WardFromName, setWardFromName] = useState(
-    Customer?.WardName
-  );
 
   const SenderNameRef = useRef();
   const SenderPhoneRef = useRef();
@@ -130,8 +121,6 @@ export const LadingCreateComponent = () => {
       City: Customer?.CityToName,
       DistrictId: Customer?.DistrictTo,
       District: Customer?.DistrictToName,
-      WardId: Customer?.WardTo,
-      Ward: Customer?.WardToName,
       Street: Customer?.RecipientAddress,
       Address: Customer?.RecipientAddress,
       Company: Customer?.RecipientCompany,
@@ -145,10 +134,8 @@ export const LadingCreateComponent = () => {
   const [RecipientCompany, bindRecipientCompany, setRecipientCompany] = useInput("");
   const [CityTo, setCityTo] = useState(0);
   const [DistrictTo, setDistrictTo] = useState(0);
-  const [WardTo, setWardTo] = useState(0);
   const [CityToName, setCityToName] = useState("");
   const [DistrictToName, setDistrictToName] = useState("");
-  const [WardToName, setWardToName] = useState("");
   const [Lat, setLat] = useState(0);
   const [Lng, setLng] = useState(0);
 
@@ -275,7 +262,6 @@ export const LadingCreateComponent = () => {
 
   const [IsAcctive, setIsAcctive] = useState(0);
   const [IsLoad, setIsLoad] = useState(false); // active input form when click button edit
-  const [IsLoadWardTo, setIsLoadWardTo] = useState(false); // active input form when click button edit
   const [IsLoadDistrictTo, setIsLoadDistrictTo] = useState(false); // active input form when click button edit
   //#endregion KHAI BÁO CÁC BIẾN ACTION ĐỂ LOAD DATA LÊN FORM
 
@@ -309,14 +295,13 @@ export const LadingCreateComponent = () => {
 
   /* run after render */
   useEffect(() => {
-    if (Customer === null || Customer === {}) {
+    if (Customer === null) {
       history.push("/");
     }
     APIC_spLadingGetMany();
     APIC_spServiceGetMany();
     setCityFrom(Customer?.City);
     ReadLadingDraft();
-    //setIsChangeWard(1);
   }, []);
 
   //this for APIC_spServiceGetMany no run more time when click, is just one run
@@ -324,7 +309,7 @@ export const LadingCreateComponent = () => {
     IsRunservice === 1 ? APIC_spServiceGetMany() : Norun();
   }, [IsRunservice]);
 
-  /* Chose item from select common province,district,ward*/
+  /* Chose item from select common province,district*/
 
   const Norun = () => {
   };
@@ -835,9 +820,7 @@ export const LadingCreateComponent = () => {
                         <br />
                         <b style={{ display: "inline-block", width: "250px" }}>- Số nhà, đường <i>(No., Street)</i></b>: {item.Street !== undefined ? item.Street : item.RecipientAddress}
                         <br />
-                        <b style={{ display: "inline-block", width: "250px" }}>- Phường/Xã <i>(Ward/Commune)</i></b>: {item.Wards}
-                        <br />
-                        <b style={{ display: "inline-block", width: "250px" }}>- Quận/Huyện <i>(District)</i></b>: {item.District}
+                        <b style={{ display: "inline-block", width: "250px" }}>- Phường/Xã <i>(District)</i></b>: {item.District}
                         <br />
                         <b style={{ display: "inline-block", width: "255px" }}>- Tỉnh/TP <i>(Province/City)</i></b>: {item.CityRecipientCode}
                       </td>
@@ -957,7 +940,6 @@ export const LadingCreateComponent = () => {
     onChooseProvinceTo({});
     // onChooseProvinceTo({ value: 0, label:'Chọn tỉnh thành'})
     onChooseDistrictTo({});
-    onChooseWardTo({});
     setTitle("TẠO ĐƠN HÀNG");
     APIC_spServiceGetMany();
     setNumberCoCheck(0);
@@ -973,11 +955,9 @@ export const LadingCreateComponent = () => {
     IsLoadDistrictTo === false
       ? setIsLoadDistrictTo(true)
       : setIsLoadDistrictTo(false);
-    IsLoadWardTo === false ? setIsLoadWardTo(true) : setIsLoadWardTo(false);
 
     setRecipientPhone("");
     setCityTo(0);
-    setWardTo(0);
     setRecipientAddress("");
     setRecipientAddressOld("");
     setRecipientName("");
@@ -1069,24 +1049,21 @@ export const LadingCreateComponent = () => {
       else { //Mở từ form ước tính cước phí
         onChooseProvinceFrom({ value: parseInt(draft?.CityFrom), label: draft?.CityFromName });
         onChooseDistrictFrom({ value: parseInt(draft?.DistrictFrom), label: draft?.DistrictFromName });
-        onChooseWardFrom({ value: 0, label: "" });
         setSenderStreet("");
         setSenderName("");
         setSenderPhone("");
         setSenderAddress(draft?.DistrictFromName + ", " + draft?.CityFromName);
         onChooseProvinceTo({ value: parseInt(draft?.CityTo), label: draft?.CityToName });
         onChooseDistrictTo({ value: parseInt(draft?.DistrictTo), label: draft?.DistrictToName });
-        onChooseWardTo({ value: parseInt(draft?.WardTo), label: draft?.WardToName });
         setRecipientStreet("");
         setRecipientPhone("");
         setRecipientName("");
         setRecipientCompany("");
-        setRecipientAddress(draft?.WardToName + ", " + draft?.DistrictToName + ", " + draft?.CityToName);
+        setRecipientAddress(draft?.DistrictToName + ", " + draft?.CityToName);
         changeServiceId({ value: draft?.ServiceID, label: draft?.ServiceName });
         setServiceID(draft?.ServiceID);
         setServiceName(draft?.ServiceName);
         setWeight(draft?.Weight);
-        setIsChangeWard(1);
         setIsChangePriceMain(1);
         setShowSender(" show active");
         setShowReceipient(" show active");
@@ -1114,10 +1091,6 @@ export const LadingCreateComponent = () => {
       value: item.obj.DistrictiId,
       label: item.obj.DistrictyName,
     });
-    onChooseWardFrom({
-      value: item.obj.WarId,
-      label: item.obj.WarName,
-    });
 
     setSenderStreet(item.obj.Street_Number);
     setSenderAddress(item.obj.AddressFull);
@@ -1127,7 +1100,7 @@ export const LadingCreateComponent = () => {
 
   const changeStreetFrom = (e) => {
     setSenderStreet(e);
-    setSenderAddress(e + ", " + WardFromName + ", " + DistrictFromName + ", " + CityFromName);
+    setSenderAddress(e + ", " + DistrictFromName + ", " + CityFromName);
   };
 
   //#endregion Chọn địa chỉ gửi
@@ -1140,7 +1113,6 @@ export const LadingCreateComponent = () => {
     setRecipientMeno(item);
     onChooseProvinceTo({ value: item.obj.CityId, label: item.obj.City });
     onChooseDistrictTo({ value: item.obj.DistrictId, label: item.obj.District });
-    onChooseWardTo({ value: item.obj.WardId, label: item.obj.Ward });
 
     setRecipientStreet(item.obj.Street);
     setRecipientPhone(item.obj.Phone);
@@ -1158,12 +1130,12 @@ export const LadingCreateComponent = () => {
 
   const changeStreetTo = (e) => {
     setRecipientStreet(e);
-    setRecipientAddress(e + ", " + WardToName + ", " + DistrictToName + ", " + CityToName);
+    setRecipientAddress(e + ", " + DistrictToName + ", " + CityToName);
     if (e === "") {
       setLng(0);
       setLat(0);
     }
-    else if (e.length > 5 && (e + ", " + WardToName + ", " + DistrictToName + ", " + CityToName).toUpperCase() !== RecipientAddressOld.toUpperCase()) {
+    else if (e.length > 5 && (e + ", " + DistrictToName + ", " + CityToName).toUpperCase() !== RecipientAddressOld.toUpperCase()) {
       let check = StreetList.find(p => p.Street.toUpperCase() === e.toUpperCase());
       if (check !== undefined) {
         setLat(check.Lat);
@@ -1178,7 +1150,7 @@ export const LadingCreateComponent = () => {
 
   //#endregion Chọn địa chỉ nhận
 
-  //#region Chọn phường xã, quận huyện, tỉnh thành
+  //#region Chọn phường xã, tỉnh thành
 
   const onChooseProvinceFrom = (item) => {
     setCityFromName(item.label);
@@ -1198,56 +1170,35 @@ export const LadingCreateComponent = () => {
     );
   };
 
-  const onChooseWardFrom = (item) => {
-    setWardFromName(item.label);
-    setWardFrom(item.value);
-    setSenderAddress(
-      RecipientStreet + ", " +
-      item.label + ", " +
-      DistrictFromName + ", " +
-      CityFromName
-    );
-  };
   //
   const onChooseProvinceTo = (item) => {
     setCityToName(item.label);
     setCityTo(item.value);
     setRecipientAddress(RecipientStreet + ", " + item.label);
   };
-  const onChooseDistrictTo = (item) => {
+  const [StreetList, setStreetList] = useState([]);
+  const onChooseDistrictTo = async (item) => {
     setDistrictToName(item.label);
     setDistrictTo(item.value);
-    setRecipientAddress(
-      RecipientStreet + ", " +
-      (item.label) + ", " +
-      CityToName
-    );
-    setIsChangeWard(0);
-  };
-  const [StreetList, setStreetList] = useState([]);
-  const onChooseWardTo = async (item) => {
-    setWardToName(item.label);
-    setWardTo(item.value);
-    setIsChangeWard(1); // Để gọi useEffect tính ngoại tuyến
+    setIsChangeDistrict(1); // Để gọi useEffect tính ngoại tuyến
     if (item.value === undefined)
       return
     setRecipientAddress(
       RecipientStreet + ", " +
       item.label + ", " +
-      DistrictToName + ", " +
       CityToName
     );
     //Gọi api nạp danh sách địa chỉ cho khách lựa chọn
     // call redux saga
     const result = await mainAction.API_spCallServer(
       "APIC_spCustomerRecipientGetByLocation",
-      [{WardId: item.value }],
+      [{DistrictId: item.value }],
       dispatch
     );
     setStreetList(result);
   };
 
-  //#endregion  Chọn phường xã, quận huyện, tỉnh thành
+  //#endregion  Chọn phường xã, tỉnh thành
 
   //#region Kiểm tra lấy lat lng địa chỉ nhận
 
@@ -1387,7 +1338,7 @@ export const LadingCreateComponent = () => {
       DistrictFrom === 0 ||
       DistrictFrom == undefined
     ) {
-      Alerterror("Chọn quận huyện người gửi");
+      Alerterror("Chọn phường xã người gửi");
       return;
     }
     if (SenderAddress == "") {
@@ -1421,13 +1372,6 @@ export const LadingCreateComponent = () => {
     if (
       DistrictTo === 0 ||
       DistrictTo === undefined
-    ) {
-      Alerterror("Chọn quận/huyện người nhận");
-      return;
-    }
-    if (
-      WardTo === 0 ||
-      WardTo === undefined
     ) {
       Alerterror("Chọn phường/xã người nhận");
       return;
@@ -1515,8 +1459,6 @@ export const LadingCreateComponent = () => {
             CitySendCode: CityFromName,
             DistrictID_From: DistrictFrom,
             DistrictName_From: DistrictFromName,
-            WardID_From: WardFrom,
-            WardName_From: WardFromName,
             Street_From: SenderStreet,
             CustomerName_Reality: SenderName,
             CustomerAddress_Reality: SenderAddress,
@@ -1531,8 +1473,6 @@ export const LadingCreateComponent = () => {
             CityRecipientCode: CityToName,
             DistrictID_To: DistrictTo,
             District: DistrictToName,
-            WardId: WardTo,
-            Wards: WardToName,
             ServiceId: ServiceID,
             ServiceName: ServiceName,
             ServiceGTGTId: AnotherPriceSave.ListServiceGTGTId,
@@ -1632,7 +1572,7 @@ export const LadingCreateComponent = () => {
 
 
   const APIC_spCustomerRecipientSave = async () => {
-    let GetLat = Lat, GetLng = Lng, Address = RecipientStreet + ", " + WardTo + ", " + DistrictToName + ", " + CityToName;
+    let GetLat = Lat, GetLng = Lng, Address = RecipientStreet + ", " + DistrictToName + ", " + CityToName;
     if (Lat === 0 || Lng === 0 || Lat === "" || Lng === "" || Lat === "0" || Lng === "0"
       || Lat === undefined || Lng === undefined || Lat === null || Lng === null) {
       const res = await GetLatLngGoogle(Address);
@@ -1650,8 +1590,6 @@ export const LadingCreateComponent = () => {
       City: CityToName,
       DistrictId: DistrictTo,
       District: DistrictToName,
-      WardId: WardTo,
-      Ward: WardToName,
       Street: RecipientStreet,
       Company: RecipientCompany,
       Address: RecipientAddress,
@@ -1778,9 +1716,7 @@ export const LadingCreateComponent = () => {
           CityName: data.CitySendCode,
           DistrictiId: parseInt(data.DistrictID_Fom),
           DistrictyName: data.DistrictName_From,
-          WarId: parseInt(data.WardId_From),
-          WarName: data.WardName_From,
-          Street_Number: data.CustomerAddress_Reality.replaceAll(", " + data.WardName_From + ", ", "").replaceAll(data.DistrictName_From + ", ", "").replaceAll(data.CitySendCode, ""),
+          Street_Number: data.CustomerAddress_Reality.replaceAll(data.DistrictName_From + ", ", "").replaceAll(data.CitySendCode, ""),
           AddressFull: data.CustomerAddress_Reality
         }
       });
@@ -1799,8 +1735,6 @@ export const LadingCreateComponent = () => {
           City: data.CityRecipientCode,
           DistrictId: parseInt(data.DistrictID_To),
           District: data.District,
-          WardId: parseInt(data.WardId),
-          Ward: data.Wards,
           Street: data.Street,
           Address: data.RecipientAddress,
           Company: data.RecipientCompany,
@@ -1835,18 +1769,18 @@ export const LadingCreateComponent = () => {
 
   //#region Tính ngoại tuyến
 
-  const [IsChangeWard, setIsChangeWard] = useState(0);
+  const [IsChangeDistrict, setIsChangeDistrict] = useState(0);
   const [OutlineSave, setOutlineSave] = useState({});
 
   useEffect(() => {
-    IsChangeWard === 1 ? CPN_spLocationCheckCustomer() : Norun();
-  }, [IsChangeWard]);
+    IsChangeDistrict === 1 ? CPN_spLocationCheckCustomer() : Norun();
+  }, [IsChangeDistrict]);
 
   const CPN_spLocationCheckCustomer = async () => {
-    if (WardTo === 0 || WardTo === undefined) return;
+    if (DistrictTo === 0 || DistrictTo === undefined) return;
     const pr = {
       CustomerId: parseInt(Customer?.CustomerID),
-      WardId: WardTo, //WardTo
+      DistrictId: DistrictTo, //DistrictTo
       ServiceId: ServiceID
     };
 
@@ -1870,7 +1804,7 @@ export const LadingCreateComponent = () => {
       Alertsuccess(result.Status);
     }
    
-    setIsChangeWard(0);
+    setIsChangeDistrict(0);
     setIsChangePriceMain(1);
   };
 
@@ -1991,8 +1925,7 @@ export const LadingCreateComponent = () => {
       Allowance: 0,
       TypeElec: 0, //Loại khách hàng TMĐT & KHTT
       CitySendId: CityFrom,
-      CityRecipientId: CityTo,
-      //WardTo: WardTo,
+      CityRecipientId: CityTo
     };
     setIsDelivery(_listServiceSelect.indexOf(";2;") !== -1 ? 1 : 0);
     setIsProtocol(_listServiceSelect.indexOf(";1;") !== -1 ? 1 : 0);
@@ -2144,7 +2077,7 @@ export const LadingCreateComponent = () => {
                 <div className="col-md-6">
                   <div className="form-group mt0">
                     <label className="mb0 font-weight500">
-                      Quận huyện <span className="red">*</span>
+                      Phường xã <span className="red">*</span>
                     </label>
                     <SelectDistrict
                       key="DistrictFrom"
@@ -2152,21 +2085,6 @@ export const LadingCreateComponent = () => {
                       ParentID={CityFrom}
                       onSelected={(item) => {
                         onChooseDistrictFrom(item);
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group mt0">
-                    <label className="mb0 font-weight500">
-                      Phường xã <span className="red">*</span>
-                    </label>
-                    <SelectWard
-                      key="WardFrom"
-                      onActive={WardFrom}
-                      ParentID={DistrictFrom}
-                      onSelected={(item) => {
-                        onChooseWardFrom(item);
                       }}
                     />
                   </div>
@@ -2318,7 +2236,7 @@ export const LadingCreateComponent = () => {
                   <div className="col-md-6">
                     <div className="form-group mt0">
                       <label className="mb0">
-                        Quận huyện <span className="red">*</span>
+                        Phường xã <span className="red">*</span>
                       </label>
                       <SelectDistrict
                         key="DistrictTo"
@@ -2326,26 +2244,6 @@ export const LadingCreateComponent = () => {
                         ParentID={CityTo}
                         onSelected={(item) => {
                           onChooseDistrictTo(item);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group mt0">
-                      <label className="mb0">
-                        Phường xã <span className="red">*</span>
-                      </label>
-                      <SelectWard
-                        key="WardTo"
-                        onActive={WardTo}
-                        ParentID={DistrictTo}
-                        onSelected={(item) => {
-                          onChooseWardTo(item);
-                        }}
-                        onBlur={(e) => {
-                          CPN_spLocationCheckCustomer(e);
-                          setIsChangePriceMain(1);
-                          setRecipientId(0);
                         }}
                       />
                     </div>

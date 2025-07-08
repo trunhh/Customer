@@ -10,7 +10,7 @@ import {
   ValidEmail,
   ValidPassword,
 } from "../../Utils";
-import { SelectCity, SelectDistrict, SelectWard } from "../../Common";
+import { SelectCity, SelectDistrict } from "../../Common";
 import { mainAction } from "../../Redux/Actions";
 import { CustomerAction } from "../../Redux/Actions/Main";
 import { Img } from "react-image";
@@ -30,7 +30,6 @@ export const RegisterComponent = () => {
 
   const [CityMeno, setCityMeno] = useState(0);
   const [DistrictMeno, setDistrictMeno] = useState(0);
-  const [WardMeno, setWardMeno] = useState(0);
 
   const [Password, bindPassword, setPassword] = useInput("");
   const [PasswordConfirm, bindPasswordConfirm, setPasswordConfirm] =
@@ -75,23 +74,16 @@ export const RegisterComponent = () => {
   const onChooseProvince = (item) => {
     setCityMeno(item.value);
     setDistrictMeno(0);
-    setWardMeno(0);
   };
 
   const onChooseDistrict = (item) => {
     setDistrictMeno(item.value);
-    setWardMeno(0);
-  };
-
-  const onChooseWard = (item) => {
-    setWardMeno(item.value);
   };
 
   const [ErrName, setErrName] = useState("");
   const [ErrAddress, setErrAddress] = useState("");
   const [ErrCity, setErrCity] = useState("");
   const [ErrDistrict, setErrDistrict] = useState("");
-  const [ErrWard, setErrWard] = useState("");
 
   const [PassHide, setPassHide] = useState("password");
   const [PassEye, setPassEye] = useState("");
@@ -108,7 +100,6 @@ export const RegisterComponent = () => {
       Password: Password,
       City: CityMeno,
       District: DistrictMeno,
-      Ward: WardMeno,
       GoogleId: GoogleId,
       FacebookId: FacebookId,
       SocialLoginObj: "",
@@ -180,16 +171,10 @@ export const RegisterComponent = () => {
     } else setErrCity("");
 
     if (DistrictMeno === 0 || DistrictMeno === undefined) {
-      Alerterror("Vui lòng chọn Quận huyện");
+      Alerterror("Vui lòng chọn Phường xã");
       setErrDistrict("form-error");
       return;
     } else setErrDistrict("");
-
-    if (WardMeno === 0 || WardMeno === undefined) {
-      Alerterror("Vui lòng chọn Phường xã");
-      setErrWard("form-error");
-      return;
-    } else setErrWard("");
 
     try {
       setDisable(false);
@@ -439,7 +424,7 @@ export const RegisterComponent = () => {
             <div className="col-md-6 width60 margin-top-10s">
               <div className="form-group">
                 <label className="color-grey">
-                  Quận huyện <span className="red">(*)</span>
+                  Phường xã <span className="red">(*)</span>
                 </label>
                 <SelectDistrict
                   className={"form-control " + ErrDistrict}
@@ -447,20 +432,6 @@ export const RegisterComponent = () => {
                   ParentID={CityMeno}
                   onSelected={(item) => {
                     onChooseDistrict(item);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="col-md-6 width60 margin-top-10s">
-              <div className="form-group">
-                <label className="color-grey">
-                  Phường xã <span className="red">(*)</span>
-                </label>
-                <SelectWard
-                  onActive={WardMeno}
-                  ParentID={DistrictMeno}
-                  onSelected={(item) => {
-                    onChooseWard(item);
                   }}
                 />
               </div>
