@@ -23,9 +23,10 @@ export const api = Axios.create({
   baseURL: API_END_POINT,
   headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "http://localhost:3000/",
-    allowedHeaders: ["Content-Type", "Authorization"],
+    // "Access-Control-Allow-Origin": "http://localhost:3000/",
+    // allowedHeaders: ["Content-Type", "Authorization"],
   },
+  withCredentials: true,
 });
 
 export const setToken = (token) => {
@@ -41,30 +42,31 @@ export const authApi = Axios.create({
   baseURL: API_END_POINT,
   headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "http://localhost:3000/",
+    // "Access-Control-Allow-Origin": "http://localhost:3000/",
   },
+  withCredentials: true,
 });
 
-authApi.interceptors.request.use(async (config) => {
-  console.log("🔥 API INTERCEPTOR TRIGGERED", config.url);
-  const method = config.method?.toUpperCase() || "GET";
-  const timestamp = new Date().toISOString();
-  const url = config.url;
-  const body = config.data ? JSON.stringify(config.data) : "";
+// authApi.interceptors.request.use(async (config) => {
+//   console.log("🔥 API INTERCEPTOR TRIGGERED", config.url);
+//   const method = config.method?.toUpperCase() || "GET";
+//   const timestamp = new Date().toISOString();
+//   const url = config.url;
+//   const body = config.data ? JSON.stringify(config.data) : "";
 
-  // const sessionKey = await getSessionKey();
-  const sessionKey = localStorage.getItem('token');
-  const signdata = `${method}${url}${timestamp}${body}`;
-  console.log(signdata);
+//   // const sessionKey = await getSessionKey();
+//   const sessionKey = localStorage.getItem('token');
+//   const signdata = `${method}${url}${timestamp}${body}`;
+//   console.log(signdata);
 
-  const encoder = new TextEncoder();
+//   const encoder = new TextEncoder();
   
-  const key = await crypto.subtle.importKey('raw', encoder.encode(sessionKey), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  const sign = await crypto.subtle.sign('HMAC', key, encoder.encode(signdata));
-  const signature = btoa(String.fromCharCode(...new Uint8Array(sign)));
+//   const key = await crypto.subtle.importKey('raw', encoder.encode(sessionKey), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+//   const sign = await crypto.subtle.sign('HMAC', key, encoder.encode(signdata));
+//   const signature = btoa(String.fromCharCode(...new Uint8Array(sign)));
 
-  config.headers["X-Timestamp"] = timestamp;
-  config.headers["X-Signature"] = signature;
+//   config.headers["X-Timestamp"] = timestamp;
+//   config.headers["X-Signature"] = signature;
 
-  return config;
-});
+//   return config;
+// });
