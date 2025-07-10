@@ -23,8 +23,8 @@ export function* API_spCallServer(action) {
         yield put({ type: mainTypes.LOADING_SUCCESS, payload: true });
 
         //set token
-        const token = localStorage.getItem('token');
-        setToken(token);
+        // const token = localStorage.getItem('token');
+        // setToken(token);
 
         /// catch api die
         yield delay(300);
@@ -55,7 +55,7 @@ export function* API_spCallServer(action) {
             // Xử lý token hết hạn
             const login = localStorage.getItem('login');
             if (login !== '') {
-              localStorage.setItem('token', '');
+            //   localStorage.setItem('token', '');
               localStorage.setItem('CustomerID', '');
               localStorage.setItem('GroupInfo', '');
               localStorage.setItem('login', '');
@@ -88,9 +88,8 @@ export function* API_Login(action) {
       // check call api success
     //   if (respone && respone.status === 200) {
       if (respone && respone.status === 200) {
-        console.log(respone.data);
         respone.data.Status === 'False' ? action.resolve([]) : action.resolve(JSON.parse(respone.data.data))
-        localStorage.setItem('token', respone.data.token);
+        // localStorage.setItem('token', respone.data.token);
         yield put({ type: mainTypes.LOADING_SUCCESS, payload: false });
         
       } else {
