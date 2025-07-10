@@ -12,6 +12,7 @@ import { mainAction } from "../../Redux/Actions";
 import { CustomerAction } from "../../Redux/Actions/Main";
 import { APIKey, TOKEN_DEVICE, GOOGLE_LOGIN_CLIENTID, FACEBOOK_LOGIN_APPID } from "../../Services/Api";
 import LayoutMain from "../../Layout/LayoutMain";
+import { useDispatch } from "react-redux";
 /* Load CSS */
 
 export const ProfiveComponent = () => {

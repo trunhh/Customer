@@ -20,8 +20,7 @@ import {
   LadingExcelComponent,
   LadingGetPriceComponent,
   LookupLading,
-  SearchLading,
-  V1LadingCreateComponent,
+  SearchLading
 } from "../Component/Main";
 
 import {
@@ -133,7 +132,6 @@ export const Routers = () => {
 
           //#region VẬN ĐƠN
           <Route exact path="/tao-nhanh-van-don" component={LadingCreateComponent} />
-          <Route exact path="/tao-nhanh-van-don-v1" component={V1LadingCreateComponent} />
           <Route exact path="/tim-kiem-van-don" component={SearchLading} />
           <Route exact path="/tra-cuu-van-don" component={LookupLading} />
           <Route exact path="/upload-excel-van-don" component={LadingExcelComponent} />
