@@ -1441,9 +1441,10 @@ export const LadingCreateComponent = () => {
         });
       }
     const result = await mainAction.API_spCallServer(
-      "CPN_spLading_Save_V3",
+      // "CPN_spLading_Save_V3",
+      "GTEL_spCreateLading",
       {
-          ListBill: [{
+          Bill: [{
             // TokenDevices:TOKEN_DEVICE,
             Id: LadingId,
             Code: LadingCode,
@@ -1511,7 +1512,7 @@ export const LadingCreateComponent = () => {
             DiscountMoney: 0,
             PriceMain: AnotherPriceSave.PriceMain,
             Allowance: 0,
-            PPXDPercent: 0,
+            // PPXDPercent: 0,
             PPXDMoney: AnotherPriceSave.PPXDMoney,
             PPXDPercent: AnotherPriceSave.PPXDPercent,
             IsPPXD: 1,
