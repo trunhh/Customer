@@ -6,6 +6,7 @@ const SelectDistrictComp = React.forwardRef(({
   onSelected = () => { },
   ParentID = 0,
   onActive = 0,
+  type = 0,
   Disabled = false
 }, ref) => {
   const [data, setData] = useState([]);
@@ -21,7 +22,7 @@ const SelectDistrictComp = React.forwardRef(({
     if (ParentID === 0) return;
     const pr = {
       ParentID: ParentID,
-      Type: 2,
+      Type: type,
     };
     const list = await mainAction.API_spCallServer(
       "CPN_spLocation_GET",

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef} from "react";
+import Select from "react-select";
 import { useDispatch } from "react-redux";
 import {
   SelectCity,
@@ -99,6 +100,12 @@ export const LadingCreateComponent = () => {
   const [DistrictFromName, setDistrictFromName] = useState(
     Customer?.DistrictName
   );
+
+  // const [oldCity, setOldCity] = useState({id: 0, label: ""});
+  // const [oldDistrict, setOldDistrict] = useState({id: 0, label: ""});
+  // const [oldWard, setOldWard] = useState({id: 0, label: ""});
+  const [oldAddress, setOldAddress] = useState();
+  const [listOldAddress, setListOldAddress] = useState();
 
   const SenderNameRef = useRef();
   const SenderPhoneRef = useRef();
@@ -1087,10 +1094,7 @@ export const LadingCreateComponent = () => {
     setSenderName(item.obj.NameSend);
     setSenderPhone(item.obj.PhoneSend);
     onChooseProvinceFrom({ value: item.obj.CityId, label: item.obj.CityName });
-    onChooseDistrictFrom({
-      value: item.obj.DistrictiId,
-      label: item.obj.DistrictyName,
-    });
+    onChooseDistrictFrom({ value: item.obj.DistrictiId, label: item.obj.DistrictyName });
 
     setSenderStreet(item.obj.Street_Number);
     setSenderAddress(item.obj.AddressFull);
@@ -1196,6 +1200,19 @@ export const LadingCreateComponent = () => {
       dispatch
     );
     setStreetList(result);
+
+    const addressList = await mainAction.API_spCallServer(
+      "GTEL_spGetMappedLocation",
+      [{Code: item.value }],
+      dispatch
+    );
+
+    const addressWS = addressList.map(addr => ({
+      value: addr.value,
+      label: RecipientStreet + ", " + addr.label
+    }));
+    setListOldAddress(addressWS);
+    //RecipientStreet
   };
 
   //#endregion  Chọn phường xã, tỉnh thành
@@ -1531,6 +1548,7 @@ export const LadingCreateComponent = () => {
             Quanlity: ProductQuality,
             Lat_Recipient: GetLat,
             Lng_Recipient: GetLng,
+            RecipientMapId: oldAddress.value
           }],
           Products: prd
         },
@@ -2071,6 +2089,7 @@ export const LadingCreateComponent = () => {
                       onSelected={(item) => {
                         onChooseProvinceFrom(item);
                       }}
+                      version={0}
                       onBlur={(e) => setIsChangePriceMain(1)}
                     />
                   </div>
@@ -2084,6 +2103,7 @@ export const LadingCreateComponent = () => {
                       key="DistrictFrom"
                       onActive={DistrictFrom}
                       ParentID={CityFrom}
+                      type={2}
                       onSelected={(item) => {
                         onChooseDistrictFrom(item);
                       }}
@@ -2219,6 +2239,23 @@ export const LadingCreateComponent = () => {
                       />
                     </div>
                   </div>
+                  <div className="col-md-12 margin-top-20">
+                    <div className="form-group">
+                      <label>Công ty nhận</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        ref={RecipientCompanyRef}
+                        value={RecipientCompany}
+                        {...bindRecipientCompany}
+                        minLength="0"
+                        maxLength="250"
+                      />
+                    </div>
+                  </div>
+                  {/* <div className="col-md-12 mt-2">
+                    <div className="title text-center">ĐỊA CHỈ TRƯỚC SÁT NHẬP</div>
+                  </div>
                   <div className="col-md-6">
                     <div className="form-group mt0">
                       <label className="mb0">
@@ -2228,9 +2265,28 @@ export const LadingCreateComponent = () => {
                         onActive={CityTo}
                         IsLoad={IsLoad}
                         onSelected={(item) => {
-                          onChooseProvinceTo(item);
+                          setOldCity({id: item.value, label: item.label});
+                          setOldAddress(item.label)
                         }}
+                        version={1}
                         onBlur={(e) => setIsChangePriceMain(1)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group mt0">
+                      <label className="mb0">
+                        Quận huyện <span className="red">*</span>
+                      </label>
+                      <SelectDistrict
+                        // key="DistrictTo"
+                        onActive={DistrictTo}
+                        ParentID={oldCity.id}
+                        type={2}
+                        onSelected={(item) => {
+                          setOldDistrict({id: item.value, label: item.label});
+                          setOldAddress(item.label + ", " + oldCity.label)
+                        }}
                       />
                     </div>
                   </div>
@@ -2240,20 +2296,63 @@ export const LadingCreateComponent = () => {
                         Phường xã <span className="red">*</span>
                       </label>
                       <SelectDistrict
-                        key="DistrictTo"
+                        // key="DistrictTo"
                         onActive={DistrictTo}
-                        ParentID={CityTo}
+                        ParentID={oldDistrict.id}
+                        type={3}
                         onSelected={(item) => {
-                          onChooseDistrictTo(item);
+                          // onChooseDistrictTo(item);
+                          setOldWard({id: item.value, label: item.label});
+                          setOldAddress(item.label + ", " + oldDistrict.label + ", " + oldCity.label)
                         }}
                       />
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <div className="form-group StreetToArea" style={{ marginTop: "27px" }}>
-                      <label>
+                    <div className="form-group StreetToArea mt0">
+                      <div className="mb0" style={{fontWeight: "500", fontSize: "14px"}}>
                         Số nhà /Đường <span className="red">*</span>
-                      </label>
+                      </div>
+                      <input
+                        type="text"
+                        className="form-control"
+                        minLength="0"
+                        maxLength="500"
+                        ref={RecipientStreetRef}
+                        value={RecipientStreet}
+                        {...bindRecipientStreet}
+                        onBlur={(e) => {
+                          changeStreetTo(e.target.value);
+                          setRecipientId(0);
+                          setOldAddress(RecipientStreet + ", " + oldWard.label + ", " + oldDistrict.label + ", " + oldCity.label)
+                        }}
+                      />
+                      <div className="ListStreet">
+                        {StreetHtml}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      <div style={{fontWeight: "500", fontSize: "14px"}}>
+                        Địa chỉ nhận trước sát nhập <span className="red">*</span>
+                      </div>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={oldAddress}
+                        minLength="0"
+                        maxLength="500"
+                        disabled="disabled"
+                        style={{backgroundColor: "#fafafa"}}
+                      />
+                    </div>
+                  </div> */}
+                  <div className="col-md-12">
+                    <div className="form-group StreetToArea mt0">
+                      <div className="mb0" style={{fontWeight: "500", fontSize: "14px"}}>
+                        Số nhà /Đường <span className="red">*</span>
+                      </div>
                       <input
                         type="text"
                         className="form-control"
@@ -2272,7 +2371,39 @@ export const LadingCreateComponent = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-12 margin-top-20">
+                  <div className="col-md-6">
+                    <div className="form-group mt0">
+                      <label className="mb0">
+                        Tỉnh thành <span className="red">*</span>
+                      </label>
+                      <SelectCity
+                        onActive={CityTo}
+                        IsLoad={IsLoad}
+                        onSelected={(item) => {
+                          onChooseProvinceTo(item);
+                        }}
+                        version={0}
+                        onBlur={(e) => setIsChangePriceMain(1)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group mt0">
+                      <label className="mb0">
+                        Phường xã <span className="red">*</span>
+                      </label>
+                      <SelectDistrict
+                        key="DistrictTo"
+                        onActive={DistrictTo}
+                        ParentID={CityTo}
+                        type={2}
+                        onSelected={(item) => {
+                          onChooseDistrictTo(item);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-12 margin-top-15">
                     <div className="form-group">
                       <label>
                         Địa chỉ nhận <span className="red">*</span>
@@ -2286,21 +2417,17 @@ export const LadingCreateComponent = () => {
                         minLength="0"
                         maxLength="500"
                         disabled="disabled"
+                        style={{backgroundColor: "#fafafa"}}
                       />
                     </div>
                   </div>
-                  <div className="col-md-12 margin-top-20">
+                  <div className="col-md-12">
                     <div className="form-group">
-                      <label>Công ty nhận</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        ref={RecipientCompanyRef}
-                        value={RecipientCompany}
-                        {...bindRecipientCompany}
-                        minLength="0"
-                        maxLength="250"
-                      />
+                      <div className="mb0" style={{fontWeight: "500", fontSize: "14px"}}>
+                        Địa chỉ cũ <span className="red">*</span>
+                      </div>
+                      <Select value={ oldAddress || { value: -1, label: "Chọn địa chỉ cũ" }} onChange={(option) => setOldAddress(option)} 
+                        options={listOldAddress} isDisabled={DistrictTo ? false : true} />
                     </div>
                   </div>
                   <div className="col-md-12 text-center">

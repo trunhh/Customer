@@ -7,7 +7,8 @@ import { Alerterror } from '../Utils';
 const SelectCityComp = React.forwardRef(({
   Disabled = false,
   onSelected = () => { },
-  onActive = 0
+  onActive = 0,
+  version = 0,
 }, ref) => {
 
   const [data, setData] = useState([]);
@@ -24,7 +25,7 @@ const SelectCityComp = React.forwardRef(({
     try {
         const listState = await mainAction.API_spCallServer(
             'CPN_spCity_Local',
-            null,
+            {Version: version},
             dispatch
         );
     /*
