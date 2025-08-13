@@ -119,8 +119,9 @@ export const CustomerComplain = () => {
       mainAction.LOADING({ IsLoading: false }, dispatch);
       Alertsuccess("Thành công");
       APIC_spCustomerComplain_Clear();
-      const NotifiParam = {
-        Json: JSON.stringify({
+      const resultNotify = await mainAction.API_spCallServer(
+        "APIC_spSendNotification",
+        {
           CustomerId: CustomerID,
           FuncSend: "ComplainCreate",
           SendFrom: "WEB CUSTOMER",
@@ -131,11 +132,7 @@ export const CustomerComplain = () => {
               Content: Content,
             },
           ],
-        }),
-        func: "APIC_spSendNotification",
-      };
-      const resultNotify = await mainAction.API_spCallServer(
-        NotifiParam,
+        },
         dispatch
       );
       mainAction.LOADING({ IsLoading: false }, dispatch);
