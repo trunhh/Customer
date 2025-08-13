@@ -30,6 +30,7 @@ import Barcode from "react-barcode";
 import { Link } from "react-router-dom";
 import $ from "jquery";
 import LayoutMain from "../../Layout/LayoutMain";
+import { SelectOldAddress } from "../../Common/SelectOldAddress";
 
 export const LadingCreateComponent = () => {
   useEffect(() => {
@@ -105,7 +106,6 @@ export const LadingCreateComponent = () => {
   // const [oldDistrict, setOldDistrict] = useState({id: 0, label: ""});
   // const [oldWard, setOldWard] = useState({id: 0, label: ""});
   const [oldAddress, setOldAddress] = useState();
-  const [listOldAddress, setListOldAddress] = useState();
 
   const SenderNameRef = useRef();
   const SenderPhoneRef = useRef();
@@ -141,6 +141,7 @@ export const LadingCreateComponent = () => {
   const [RecipientCompany, bindRecipientCompany, setRecipientCompany] = useInput("");
   const [CityTo, setCityTo] = useState(0);
   const [DistrictTo, setDistrictTo] = useState(0);
+  const [DistrictToCode, setDistrictToCode] = useState(0);
   const [CityToName, setCityToName] = useState("");
   const [DistrictToName, setDistrictToName] = useState("");
   const [Lat, setLat] = useState(0);
@@ -1183,9 +1184,15 @@ export const LadingCreateComponent = () => {
   const [StreetList, setStreetList] = useState([]);
   const onChooseDistrictTo = async (item) => {
     setDistrictToName(item.label);
-    setDistrictTo(parseInt(item.value.id));
+    if(item.value?.id){
+      setDistrictTo(parseInt(item.value.id));
+      setDistrictToCode(item.value.code);
+    }
+    else{
+      setDistrictTo(item.value);
+    }
     setIsChangeDistrict(1); // Để gọi useEffect tính ngoại tuyến
-    if (item.value.id === undefined)
+    if (item.value === undefined)
       return
     setRecipientAddress(
       RecipientStreet + ", " +
@@ -1200,18 +1207,6 @@ export const LadingCreateComponent = () => {
       dispatch
     );
     setStreetList(result);
-
-    const addressList = await mainAction.API_spCallServer(
-      "GTEL_spGetMappedLocation",
-      [{Code: item.value.code}],
-      dispatch
-    );
-
-    const addressWS = addressList.map(addr => ({
-      value: addr.value,
-      label: RecipientStreet + ", " + addr.label
-    }));
-    setListOldAddress(addressWS);
     //RecipientStreet
   };
 
@@ -2426,8 +2421,7 @@ export const LadingCreateComponent = () => {
                       <div className="mb0" style={{fontWeight: "500", fontSize: "14px"}}>
                         Địa chỉ cũ <span className="red">*</span>
                       </div>
-                      <Select value={ oldAddress || { value: -1, label: "Chọn địa chỉ cũ" }} onChange={(option) => setOldAddress(option)} 
-                        options={listOldAddress} isDisabled={DistrictTo ? false : true} />
+                      <SelectOldAddress DistrictTo={DistrictToCode} RecipientStreet={RecipientStreet} onSelected={setOldAddress} ></SelectOldAddress>
                     </div>
                   </div>
                   <div className="col-md-12 text-center">
