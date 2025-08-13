@@ -1183,9 +1183,9 @@ export const LadingCreateComponent = () => {
   const [StreetList, setStreetList] = useState([]);
   const onChooseDistrictTo = async (item) => {
     setDistrictToName(item.label);
-    setDistrictTo(item.value);
+    setDistrictTo(parseInt(item.value.id));
     setIsChangeDistrict(1); // Để gọi useEffect tính ngoại tuyến
-    if (item.value === undefined)
+    if (item.value.id === undefined)
       return
     setRecipientAddress(
       RecipientStreet + ", " +
@@ -1196,14 +1196,14 @@ export const LadingCreateComponent = () => {
     // call redux saga
     const result = await mainAction.API_spCallServer(
       "APIC_spCustomerRecipientGetByLocation",
-      [{DistrictId: item.value }],
+      [{DistrictId: parseInt(item.value.id)}],
       dispatch
     );
     setStreetList(result);
 
     const addressList = await mainAction.API_spCallServer(
       "GTEL_spGetMappedLocation",
-      [{Code: item.value }],
+      [{Code: item.value.code}],
       dispatch
     );
 
@@ -1548,7 +1548,7 @@ export const LadingCreateComponent = () => {
             Quanlity: ProductQuality,
             Lat_Recipient: GetLat,
             Lng_Recipient: GetLng,
-            RecipientMapId: oldAddress.value
+            RecipientMapId: oldAddress.value,
           }],
           Products: prd
         },

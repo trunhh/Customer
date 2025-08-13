@@ -33,7 +33,7 @@ const SelectDistrictComp = React.forwardRef(({
     let dataOptions = [], IsActive = 0;
     dataOptions.push(_default);
     list.forEach((element, index) => {
-      let option = { value: element.LocationId, label: element.Name, code:element.LocationCode };
+      let option = { value: {id: element.LocationId, code: element.Code}, label: element.Name, code:element.LocationCode };
       dataOptions.push(option);
     });
     setData(dataOptions);
