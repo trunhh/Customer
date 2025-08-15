@@ -69,6 +69,9 @@ export const GetCookie = (key = "") => {
         else if (key === "LinkAvatar")
             return (obj?.LinkAvatar !== "https://erp.vps.vn") ? obj?.LinkAvatar : "/assets/img/noimage.jpg";
 
+        else if (key === "OldAddress")
+            return obj?.OldAddress;
+
         else
             return null;
     }

@@ -4,9 +4,9 @@ import { useDispatch } from "react-redux";
 import { mainAction } from "../Redux/Actions";
 
 const SelectOldAddressComp = React.forwardRef(({
-    DistrictTo = null,
-    RecipientStreet = null,
+    DistrictId = null,
     onSelected = () => { },
+    onOldAddressId = 0
 }, ref) => {
     const [itemValue, setItemValue] = useState();
     const [listOldAddress, setListOldAddress] = useState();
@@ -22,27 +22,31 @@ const SelectOldAddressComp = React.forwardRef(({
         const getData = async() => {
             const addressList = await mainAction.API_spCallServer(
                 "GTEL_spGetMappedLocation",
-                [{Code: DistrictTo}],
+                [{WardId: DistrictId}],
                 dispatch
             );
         
-            if(RecipientStreet){
-                const addressWS = addressList.map(addr => ({
-                    value: addr.value,
-                    label: RecipientStreet + ", " + addr.label
-                }));
-                setListOldAddress(addressWS);
-            }
-            else{
-                setListOldAddress(addressList);
-            }
+            setListOldAddress(addressList);
         }
 
         getData();
-    }, [DistrictTo, RecipientStreet]);
+    }, [DistrictId]);
 
-    return <Select value={ itemValue || { value: -1, label: "Chọn địa chỉ cũ" }} onChange={(option) => setValue(option)} 
-        options={listOldAddress} isDisabled={DistrictTo ? false : true} />
+    useEffect(() => {
+        if (onOldAddressId != 0) {
+            setItemValue(listOldAddress?.filter(a => a.value === onOldAddressId))
+        } else {
+            setItemValue({ value: -1, label: "Chọn địa chỉ cũ" });
+        }
+
+    }, [onOldAddressId]);
+
+    return <Select 
+
+        value={ itemValue }
+        onChange={(option) => setValue(option)} 
+        options={listOldAddress}
+        isDisabled={DistrictId ? false : true} />
 });
 
 export const SelectOldAddress = React.memo(SelectOldAddressComp);

@@ -141,7 +141,6 @@ export const LadingCreateComponent = () => {
   const [RecipientCompany, bindRecipientCompany, setRecipientCompany] = useInput("");
   const [CityTo, setCityTo] = useState(0);
   const [DistrictTo, setDistrictTo] = useState(0);
-  const [DistrictToCode, setDistrictToCode] = useState(0);
   const [CityToName, setCityToName] = useState("");
   const [DistrictToName, setDistrictToName] = useState("");
   const [Lat, setLat] = useState(0);
@@ -1185,8 +1184,7 @@ export const LadingCreateComponent = () => {
   const onChooseDistrictTo = async (item) => {
     setDistrictToName(item.label);
     if(item.value?.id){
-      setDistrictTo(parseInt(item.value.id));
-      setDistrictToCode(item.value.code);
+      setDistrictTo(parseInt(item.value));
     }
     else{
       setDistrictTo(item.value);
@@ -1203,7 +1201,7 @@ export const LadingCreateComponent = () => {
     // call redux saga
     const result = await mainAction.API_spCallServer(
       "APIC_spCustomerRecipientGetByLocation",
-      [{DistrictId: parseInt(item.value.id)}],
+      [{DistrictId: parseInt(item.value)}],
       dispatch
     );
     setStreetList(result);
@@ -2421,7 +2419,11 @@ export const LadingCreateComponent = () => {
                       <div className="mb0" style={{fontWeight: "500", fontSize: "14px"}}>
                         Địa chỉ cũ <span className="red">*</span>
                       </div>
-                      <SelectOldAddress DistrictTo={DistrictToCode} RecipientStreet={RecipientStreet} onSelected={setOldAddress} ></SelectOldAddress>
+                      <SelectOldAddress
+                        DistrictId={DistrictTo}
+                        onOldAddressId={oldAddress}
+                        onSelected={(e) => setOldAddress(e)}
+                      />
                     </div>
                   </div>
                   <div className="col-md-12 text-center">
