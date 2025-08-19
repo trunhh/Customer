@@ -82,10 +82,10 @@ export const LadingExcelComponent = () => {
         try {
           let _rowIndex = 1;
           data.forEach((element, index) => {
-            if (index === 0 && element.__EMPTY_56 !== "Mã p/xã") {
+            if (index === 0 && !element.__EMPTY_4.includes("3")) {
               mainAction.LOADING({ IsLoading: false }, dispatch);
               Alerterror(
-                "File mẫu excel đã được cập nhật để bổ sung thêm nhiều sản phẩm cho đơn hàng. Vui lòng tải file mẫu mới !"
+                "File mẫu excel đã được cập nhật theo địa chỉ 2 cấp. Vui lòng tải file mẫu mới !"
               );
               return;
             }
@@ -105,13 +105,16 @@ export const LadingExcelComponent = () => {
                   CustomerCode: GetCookie("CustomerCode"), // Mã khách hàng
                   RecipientAddress: element.__EMPTY_1, // Địa chỉ
                   CityRecipientNameTo: element.__EMPTY_2, // Tên tỉnh đến
+                  CityRecipientId: element.__EMPTY_53,
                   DistrictNameTo: element.__EMPTY_3, // Tên xã đến
-                  WardsNameTo: element.__EMPTY_4, // Tên p/xã đến
+                  DistrictID_To: element.__EMPTY_55,
+                  RecipientMapName: element.__EMPTY_4, // Địa chỉ 3 cấp
+                  RecipientMapId: element.__EMPTY_57,
                   RecipientName: element.__EMPTY_5, // Tên người nhận
                   RecipientPhone: element.__EMPTY_6, // SĐT NG nhận
                   RecipientCompany: element.__EMPTY_7, // Cty Người nhận
-                  ServiceCode: element.__EMPTY_8, // Mã dịch vụ
-                  PaymentType: element.__EMPTY_9, // Hình thức thanh toán
+                  ServiceCode: element.__EMPTY_58, // Mã dịch vụ
+                  PaymentType: element.__EMPTY_59, // Hình thức thanh toán
                   Weight:
                     element.__EMPTY_8.indexOf("CBM") === -1
                       ? element.__EMPTY_10
@@ -468,7 +471,7 @@ export const LadingExcelComponent = () => {
                             className="Blue font-weight500 margin-left-10s"
                             download
                             target="_blank"
-                            to="/assets/exceltemp/MauVanDonExcel-15-06-2022.xlsx"
+                            to="/assets/ExcelTemp/MauVanDonExcel-190825.xlsx"
                           >
                             Tải file mẫu
                           </Link>
@@ -491,7 +494,7 @@ export const LadingExcelComponent = () => {
                                   e.target.value = null;
                                 }}
                                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                placeholder="Chọn file tải lên (Mauvandonexcel2021.xlsx)"
+                                placeholder="Chọn file tải lên (MauVanDonExcel-190825.xlsx)"
                               />
                             </span>{" "}
                             để tải lên
@@ -564,7 +567,7 @@ export const LadingExcelComponent = () => {
                     className="Blue font-weight500"
                     download
                     target="_blank"
-                    to="/assets/exceltemp/MauVanDonExcel-15-06-2022.xlsx"
+                    to="/assets/ExcelTemp/MauVanDonExcel-190825.xlsx"
                   >
                     Tải file mẫu
                   </Link>
