@@ -13,11 +13,6 @@ const SelectOldAddressComp = React.forwardRef(({
 
     const dispatch = useDispatch();
 
-    const setValue = (item) => {
-        setItemValue(item);
-        onSelected(item);
-    }
-
     useEffect(() => {
         const getData = async() => {
             const addressList = await mainAction.API_spCallServer(
@@ -33,8 +28,8 @@ const SelectOldAddressComp = React.forwardRef(({
     }, [DistrictId]);
 
     useEffect(() => {
-        if (onOldAddressId != 0) {
-            setItemValue(listOldAddress?.filter(a => a.value === onOldAddressId))
+        if (onOldAddressId !== 0) {
+            setItemValue(listOldAddress?.find(a => a.value === onOldAddressId))
         } else {
             setItemValue({ value: -1, label: "Chọn địa chỉ cũ" });
         }
@@ -42,11 +37,12 @@ const SelectOldAddressComp = React.forwardRef(({
     }, [onOldAddressId]);
 
     return <Select 
-
         value={ itemValue }
-        onChange={(option) => setValue(option)} 
+        onChange={(option) => onSelected(option)} 
         options={listOldAddress}
-        isDisabled={DistrictId ? false : true} />
+        isDisabled={DistrictId ? false : true} 
+        ref={ref}
+        />
 });
 
 export const SelectOldAddress = React.memo(SelectOldAddressComp);

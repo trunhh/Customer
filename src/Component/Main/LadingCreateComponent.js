@@ -2422,7 +2422,7 @@ export const LadingCreateComponent = () => {
                       <SelectOldAddress
                         DistrictId={DistrictTo}
                         onOldAddressId={oldAddress}
-                        onSelected={(e) => setOldAddress(e)}
+                        onSelected={setOldAddress}
                       />
                     </div>
                   </div>
