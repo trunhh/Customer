@@ -72,6 +72,9 @@ export const GetCookie = (key = "") => {
         else if (key === "OldAddress")
             return obj?.OldAddress;
 
+        else if (key === "AllowPaper")
+            return obj?.AllowPaper;
+
         else
             return null;
     }

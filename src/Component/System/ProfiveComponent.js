@@ -83,7 +83,7 @@ export const ProfiveComponent = () => {
 
   const onChooseOldAddress = (item) => {
     //setDistrictMeno(item);
-    setOldAddress(item.value);
+    setOldAddress(item);
   };
   /* clear data on form when insert success */
 
@@ -135,7 +135,7 @@ export const ProfiveComponent = () => {
         BankNumberName: BankNumberName == null ? "" : BankNumberName,
         BankName: BankName == null ? "" : BankName,
         BankBranch: BankBranch == null ? "" : BankBranch,
-        OldAddress: OldAddress
+        OldAddress: OldAddress.value
       };
     const data = await mainAction.API_spCallServer(
       "APIC_spCustomerUpdateInfo_V1",

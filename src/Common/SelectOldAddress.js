@@ -29,7 +29,7 @@ const SelectOldAddressComp = React.forwardRef(({
 
     useEffect(() => {
         if (onOldAddressId !== 0) {
-            setItemValue(listOldAddress?.find(a => a.value === onOldAddressId))
+            setItemValue( onOldAddressId)
         } else {
             setItemValue({ value: -1, label: "Chọn địa chỉ cũ" });
         }

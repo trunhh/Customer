@@ -46,7 +46,7 @@ export const LadingCreateComponent = () => {
   const history = useHistory();
   const [Title, setTitle] = useState("TẠO ĐƠN HÀNG MỚI");
   const [Customer, setCustomer] = useState(GetCookie("All"));
-
+  const [LadingCodeEdit, setLadingCodeEdit] = useState(GetCookie("AllowPaper"));
   //#endregion CÁC HÀM KHAI BÁO CHÍNH
 
   //#region KHAI BÁO CHO FORM TẠO ĐƠN
@@ -55,7 +55,8 @@ export const LadingCreateComponent = () => {
   const [ShowReceipient, setShowReceipient] = useState("");
 
   const [LadingId, setLadingId] = useState(0);
-  const [LadingCode, setLadingCode] = useState("");
+  const [LadingCode, bindLadingCode, setLadingCode] = useInput("");
+  const LadingCodeRef = useRef();
 
   //#region Thông tin khách hàng
 
@@ -308,6 +309,8 @@ export const LadingCreateComponent = () => {
     APIC_spLadingGetMany();
     APIC_spServiceGetMany();
     setCityFrom(Customer?.City);
+    console.log("AllowPaper", GetCookie("AllowPaper"));
+    setLadingCodeEdit(GetCookie("AllowPaper"));
     ReadLadingDraft();
   }, []);
 
@@ -943,6 +946,7 @@ export const LadingCreateComponent = () => {
   //#region HÀM CLEAR FORM KHI CLICK LÀM MỚI VÀ SAU KHI SAVE VẬN ĐƠN
 
   const Clearform = async () => {
+    setLadingCodeEdit(GetCookie("AllowPaper"));
     setLadingCode("");
     onChooseProvinceTo({});
     // onChooseProvinceTo({ value: 0, label:'Chọn tỉnh thành'})
@@ -1036,9 +1040,11 @@ export const LadingCreateComponent = () => {
   //#region Hàm load thông tin vận đơn nháp
 
   const ReadLadingDraft = async () => {
+    console.log("ReadLadingDraft");
     let editStr = localStorage.getItem("LadingEdit");
     let draftStr = localStorage.getItem("LadingDraft");
     if (editStr !== null && editStr !== undefined && editStr !== "") {
+      console.log("ReadLadingDraft1");
       Clearform();
       let ladingEdit = JSON.parse(editStr);
       APIC_spLadingEdit({ _original: { Id: ladingEdit.Id } });
@@ -1117,6 +1123,7 @@ export const LadingCreateComponent = () => {
     setRecipientMeno(item);
     onChooseProvinceTo({ value: item.obj.CityId, label: item.obj.City });
     onChooseDistrictTo({ value: item.obj.DistrictId, label: item.obj.District });
+    setOldAddress({ value: item.obj.OldAddressId, label: item.obj.OldAddress });
 
     setRecipientStreet(item.obj.Street);
     setRecipientPhone(item.obj.Phone);
@@ -1607,6 +1614,7 @@ export const LadingCreateComponent = () => {
       Address: RecipientAddress,
       Lat: GetLat,
       Lng: GetLng,
+      AddressMapId: oldAddress.value
     };
     const data = await mainAction.API_spCallServer(
         "APIC_spCustomerRecipientSaveJson",
@@ -1634,6 +1642,7 @@ export const LadingCreateComponent = () => {
       setIsAcctive(1);
       setLadingId(data.Id);
       setLadingCode(data.Code);
+      setLadingCodeEdit(false);
 
       setOnSiteDeliveryPrice(data.OnSiteDeliveryPrice);
       setOnSiteDeliveryPriceMoney(data.OnSiteDeliveryMoney);
@@ -2002,6 +2011,33 @@ export const LadingCreateComponent = () => {
   const CreateLading = (
     <form className="row">
       <div className="col-md-12">
+        {/*    Mã vận đơn giấy */}
+        <div className="margin-top-10 border-bottom-dash" hidden={!LadingCodeEdit && LadingCode === ""}>
+          <div className='title'>
+            Thông tin cơ bản{" "}
+          </div>
+          <div className="row margin-top-20">
+            <div className="col-md-12 margin-bottom-10">
+              <div className="form-group">
+                <label>
+                  Mã vận đơn <span className="red">*</span>
+                </label>
+                <input
+                  className="form-control"
+                  ref={LadingCodeRef}
+                  value={LadingCode}
+                  {...bindLadingCode}
+                  minLength="0"
+                  maxLength="12"
+                  rows="1"
+                  disabled={!LadingCodeEdit}                  
+                  placeholder='Mã vận đơn: (Ví dụ: GTP34567890)'
+                />
+              </div>
+            </div>
+          </div>
+
+        </div>
         {/*    Thông tin người gửi */}
         <div className="margin-top-10">
           <div className='title'>
@@ -2165,7 +2201,6 @@ export const LadingCreateComponent = () => {
             </div>
           </div>
         </div>
-
         {/* Thông tin người nhận */}
         <div className="">
           <div className="margin-top-10" >
