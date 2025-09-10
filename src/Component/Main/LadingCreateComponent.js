@@ -1575,14 +1575,12 @@ export const LadingCreateComponent = () => {
           dispatch
         );
       } */
-      console.log(result)
       Alertsuccess("Thành công");
       Clearform();
       APIC_spLadingGetMany();
       setOnloadSender(1);
       setOnLoadRecipient(1);
     } catch (err) {
-      console.log(err)
       Alerterror("Vui lòng liên hệ CSKH");
       setDisable(false); // disable button
     }
