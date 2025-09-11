@@ -6,43 +6,49 @@ import { mainAction } from "../Redux/Actions";
 const SelectOldAddressComp = React.forwardRef(({
     DistrictId = null,
     onSelected = () => { },
-    onOldAddressId = 0
+    onOldAddressId = 0,
+    Disabled = false
 }, ref) => {
-    const [itemValue, setItemValue] = useState();
-    const [listOldAddress, setListOldAddress] = useState();
+    const [data, setData] = useState([]);
+    const [valueS, setValueS] = useState({});
+    const [_default, setDefault] = useState({ value: 0, label: "Chọn địa chỉ cũ" });
+    const onSelecteItem = (item) => {
+      onSelected(item);
+      setValueS(item);
+    };
 
     const dispatch = useDispatch();
 
+
+    const onGetLocation = async () => {
+      if (DistrictId === 0) return;
+      const list = await mainAction.API_spCallServer(
+          "GTEL_spGetMappedLocation",
+          [{WardId: DistrictId}],
+          dispatch
+      );
+
+      let dataOptions = [];
+      dataOptions.push(_default);
+      dataOptions.push(...list);
+      setData(dataOptions);
+      if (onOldAddressId !== 0) {
+        let dataActive = dataOptions.find(a => a.value === onOldAddressId);
+        setValueS(dataActive);
+      } else  setValueS(_default);
+    };
+
     useEffect(() => {
-        const getData = async() => {
-            const addressList = await mainAction.API_spCallServer(
-                "GTEL_spGetMappedLocation",
-                [{WardId: DistrictId}],
-                dispatch
-            );
-        
-            setListOldAddress(addressList);
-        }
-
-        getData();
-    }, [DistrictId]);
-
-    useEffect(() => {
-        if (onOldAddressId !== 0) {
-            setItemValue( onOldAddressId)
-        } else {
-            setItemValue({ value: -1, label: "Chọn địa chỉ cũ" });
-        }
-
-    }, [onOldAddressId]);
+      onGetLocation();
+    }, [onOldAddressId,DistrictId]);
 
     return <Select 
-        value={ itemValue }
-        onChange={(option) => onSelected(option)} 
-        options={listOldAddress}
-        isDisabled={DistrictId ? false : true} 
-        ref={ref}
-        />
+            value={valueS} 
+            onChange={onSelecteItem}
+            options={data}
+            ref={ref}
+            isDisabled={Disabled}
+        />;
 });
 
 export const SelectOldAddress = React.memo(SelectOldAddressComp);
