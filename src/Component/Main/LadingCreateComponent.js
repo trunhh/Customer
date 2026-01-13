@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef} from "react";
+import Select from "react-select";
 import { useDispatch } from "react-redux";
 import {
   SelectCity,
@@ -29,6 +30,7 @@ import Barcode from "react-barcode";
 import { Link } from "react-router-dom";
 import $ from "jquery";
 import LayoutMain from "../../Layout/LayoutMain";
+import { SelectOldAddress } from "../../Common/SelectOldAddress";
 
 export const LadingCreateComponent = () => {
   useEffect(() => {
@@ -44,7 +46,7 @@ export const LadingCreateComponent = () => {
   const history = useHistory();
   const [Title, setTitle] = useState("TẠO ĐƠN HÀNG MỚI");
   const [Customer, setCustomer] = useState(GetCookie("All"));
-
+  const [LadingCodeEdit, setLadingCodeEdit] = useState(GetCookie("AllowPaper"));
   //#endregion CÁC HÀM KHAI BÁO CHÍNH
 
   //#region KHAI BÁO CHO FORM TẠO ĐƠN
@@ -53,7 +55,8 @@ export const LadingCreateComponent = () => {
   const [ShowReceipient, setShowReceipient] = useState("");
 
   const [LadingId, setLadingId] = useState(0);
-  const [LadingCode, setLadingCode] = useState("");
+  const [LadingCode, bindLadingCode, setLadingCode] = useInput("");
+  const LadingCodeRef = useRef();
 
   //#region Thông tin khách hàng
 
@@ -74,7 +77,8 @@ export const LadingCreateComponent = () => {
       CityName: Customer?.CityName,
       DistrictiId: Customer?.District,
       DistrictyName: Customer?.DistrictName,
-      Street_Number: Customer?.Address.replaceAll(", " + Customer?.District, "").replaceAll(", " + Customer?.City, "")
+      Street_Number: Customer?.Address.replaceAll(", " + Customer?.District, "").replaceAll(", " + Customer?.City, ""),
+      OldAddressId: Customer?.OldAddress
     }
   });
   const [SenderName, bindSenderName, setSenderName] = useInput(
@@ -100,6 +104,11 @@ export const LadingCreateComponent = () => {
     Customer?.DistrictName
   );
 
+  // const [oldCity, setOldCity] = useState({id: 0, label: ""});
+  // const [oldDistrict, setOldDistrict] = useState({id: 0, label: ""});
+  // const [oldWard, setOldWard] = useState({id: 0, label: ""});
+  const [oldAddressTo, setOldAddressTo] = useState(0);
+  const [oldAddressFrom, setOldAddressFrom] = useState(0);
   const SenderNameRef = useRef();
   const SenderPhoneRef = useRef();
   const SenderAddressRef = useRef();
@@ -301,6 +310,8 @@ export const LadingCreateComponent = () => {
     APIC_spLadingGetMany();
     APIC_spServiceGetMany();
     setCityFrom(Customer?.City);
+    console.log("AllowPaper", GetCookie("AllowPaper"));
+    setLadingCodeEdit(GetCookie("AllowPaper"));
     ReadLadingDraft();
   }, []);
 
@@ -936,6 +947,7 @@ export const LadingCreateComponent = () => {
   //#region HÀM CLEAR FORM KHI CLICK LÀM MỚI VÀ SAU KHI SAVE VẬN ĐƠN
 
   const Clearform = async () => {
+    setLadingCodeEdit(GetCookie("AllowPaper"));
     setLadingCode("");
     onChooseProvinceTo({});
     // onChooseProvinceTo({ value: 0, label:'Chọn tỉnh thành'})
@@ -1029,9 +1041,11 @@ export const LadingCreateComponent = () => {
   //#region Hàm load thông tin vận đơn nháp
 
   const ReadLadingDraft = async () => {
+    console.log("ReadLadingDraft");
     let editStr = localStorage.getItem("LadingEdit");
     let draftStr = localStorage.getItem("LadingDraft");
     if (editStr !== null && editStr !== undefined && editStr !== "") {
+      console.log("ReadLadingDraft1");
       Clearform();
       let ladingEdit = JSON.parse(editStr);
       APIC_spLadingEdit({ _original: { Id: ladingEdit.Id } });
@@ -1087,10 +1101,9 @@ export const LadingCreateComponent = () => {
     setSenderName(item.obj.NameSend);
     setSenderPhone(item.obj.PhoneSend);
     onChooseProvinceFrom({ value: item.obj.CityId, label: item.obj.CityName });
-    onChooseDistrictFrom({
-      value: item.obj.DistrictiId,
-      label: item.obj.DistrictyName,
-    });
+    onChooseDistrictFrom({ value: item.obj.DistrictiId, label: item.obj.DistrictyName });
+
+    setOldAddressFrom(item.obj.OldAddressId);
 
     setSenderStreet(item.obj.Street_Number);
     setSenderAddress(item.obj.AddressFull);
@@ -1113,6 +1126,7 @@ export const LadingCreateComponent = () => {
     setRecipientMeno(item);
     onChooseProvinceTo({ value: item.obj.CityId, label: item.obj.City });
     onChooseDistrictTo({ value: item.obj.DistrictId, label: item.obj.District });
+    setOldAddressTo(item.obj.OldAddressId);
 
     setRecipientStreet(item.obj.Street);
     setRecipientPhone(item.obj.Phone);
@@ -1179,7 +1193,12 @@ export const LadingCreateComponent = () => {
   const [StreetList, setStreetList] = useState([]);
   const onChooseDistrictTo = async (item) => {
     setDistrictToName(item.label);
-    setDistrictTo(item.value);
+    if(item.value?.id){
+      setDistrictTo(parseInt(item.value));
+    }
+    else{
+      setDistrictTo(item.value);
+    }
     setIsChangeDistrict(1); // Để gọi useEffect tính ngoại tuyến
     if (item.value === undefined)
       return
@@ -1192,10 +1211,11 @@ export const LadingCreateComponent = () => {
     // call redux saga
     const result = await mainAction.API_spCallServer(
       "APIC_spCustomerRecipientGetByLocation",
-      [{DistrictId: item.value }],
+      [{DistrictId: parseInt(item.value)}],
       dispatch
     );
     setStreetList(result);
+    //RecipientStreet
   };
 
   //#endregion  Chọn phường xã, tỉnh thành
@@ -1531,6 +1551,8 @@ export const LadingCreateComponent = () => {
             Quanlity: ProductQuality,
             Lat_Recipient: GetLat,
             Lng_Recipient: GetLng,
+            SenderMapId: oldAddressFrom,
+            RecipientMapId: oldAddressTo,
           }],
           Products: prd
         },
@@ -1557,14 +1579,12 @@ export const LadingCreateComponent = () => {
           dispatch
         );
       } */
-      console.log(result)
       Alertsuccess("Thành công");
       Clearform();
       APIC_spLadingGetMany();
       setOnloadSender(1);
       setOnLoadRecipient(1);
     } catch (err) {
-      console.log(err)
       Alerterror("Vui lòng liên hệ CSKH");
       setDisable(false); // disable button
     }
@@ -1596,6 +1616,7 @@ export const LadingCreateComponent = () => {
       Address: RecipientAddress,
       Lat: GetLat,
       Lng: GetLng,
+      AddressMapId: oldAddressTo
     };
     const data = await mainAction.API_spCallServer(
         "APIC_spCustomerRecipientSaveJson",
@@ -1623,6 +1644,7 @@ export const LadingCreateComponent = () => {
       setIsAcctive(1);
       setLadingId(data.Id);
       setLadingCode(data.Code);
+      setLadingCodeEdit(false);
 
       setOnSiteDeliveryPrice(data.OnSiteDeliveryPrice);
       setOnSiteDeliveryPriceMoney(data.OnSiteDeliveryMoney);
@@ -1718,7 +1740,8 @@ export const LadingCreateComponent = () => {
           DistrictiId: parseInt(data.DistrictID_Fom),
           DistrictyName: data.DistrictName_From,
           Street_Number: data.CustomerAddress_Reality.replaceAll(data.DistrictName_From + ", ", "").replaceAll(data.CitySendCode, ""),
-          AddressFull: data.CustomerAddress_Reality
+          AddressFull: data.CustomerAddress_Reality,
+          OldAddressId: data.SenderMapId
         }
       });
 
@@ -1740,7 +1763,8 @@ export const LadingCreateComponent = () => {
           Address: data.RecipientAddress,
           Company: data.RecipientCompany,
           Lat: data.Lat_Recipient,
-          Lng: data.Lng_Recipient
+          Lng: data.Lng_Recipient,
+          OldAddressId: data.RecipientMapId
         }
       });
       setLat(data.Lat_Recipient);
@@ -1815,50 +1839,53 @@ export const LadingCreateComponent = () => {
 
   const [IsChangePriceMain, setIsChangePriceMain] = useState(0);
   const [PriceMainSave, setPriceMainSave] = useState(0);
+  const [PriceTable, bindPriceTable, setPriceTable] = useInput('');
+  const PriceTableRef = useRef();
+  const [PriceExplain, bindPriceExplain,  setPriceExplain] = useInput('');
+  const PriceExplainRef = useRef();
+  const [EstTime, bindEstTime,  setEstTime] = useInput('');
+  const EstTimeRef = useRef();
 
   useEffect(() => {
     if (IsChangePriceMain === 1) {
       setAnotherPriceSave([]); // Xóa dữ liệu củ
-      CPN_spLading_PriceMain();
+      GTEL_CalculatePriceJson();
       setIsChangePriceMain(0);
     } else Norun();
   }, [IsChangePriceMain]);
 
-  const CPN_spLading_PriceMain = async () => {
+  const GTEL_CalculatePriceJson = async () => {
     if (
-      CityFrom === 0 ||
-      CityTo === 0 ||
+      oldAddressFrom === 0 ||
+      oldAddressTo === 0 ||
       ((Weight === "" || Weight === "0") && !IsWeight) ||
       ((Mass === "" || Mass === "0") && IsWeight) ||
       ServiceID === 0 || ServiceID === undefined
     ) {
       return;
     }
-    let pr = {
-      CustomerId: Customer?.CustomerID,
-      ServiceId: ServiceID,
-      Weight: Weight === "" ? 0 : parseInt(Weight.toString().replaceAll(",", "")),
-      Mass: Mass === "" ? 0 : Mass.toString().replaceAll(",", ""),
-      Number: NumberItem === "" ? 1 : parseInt(NumberItem.toString().replaceAll(",", "")),
-      ProvinceID_From: CityFrom,
-      DistrictID_From: DistrictFrom,
-      ProvinceID_To: CityTo,
-      DistrictID_To: DistrictTo,
-      Keykl: 0,
-      IsAPI: 1,
-    };
     try {
       // call redux saga
       const data = await mainAction.API_spCallServer(
-          "CPN_spLading_PriceMain",
-          pr,
+          "GTEL_CalculatePriceJson",
+          {
+            ServiceId: ServiceID,
+            AddressFrom: oldAddressFrom,
+            AddressTo: oldAddressTo,
+            Weight: Weight === "" ? 0 : parseInt(Weight.toString().replaceAll(",", "")),
+            Mass: Mass === "" ? 0 : parseInt(Mass.toString().replaceAll(",", "")),
+            Number: NumberItem === "" ? 1 : parseInt(NumberItem.toString().replaceAll(",", "")),
+          },
           dispatch
       );
       //let pricemain = data.length === 0 ? 18000 : parseInt(data);
       // let PriceNT = pricemain * OnSiteDeliveryPrice / 100;
       //  await setOutlineSave({ OnSiteDeliveryPrice: OnSiteDeliveryPrice, OnSiteDeliveryPriceMoney: PriceNT });
       //await setOnSiteDeliveryPriceMoney(PriceNT);
-      await setPriceMainSave(data);
+      await setPriceMainSave(data.Amount === undefined ? 0 : data.Amount);
+      await setEstTime(data.EstimatedTime);
+      await setPriceTable(data.Table);
+      await setPriceExplain(data.Explain);
       // await setPriceMain(FormatMoney(pricemain, 0));
     } catch (err) {
       Alerterror("Vui lòng liên hệ CSKH");
@@ -1991,6 +2018,33 @@ export const LadingCreateComponent = () => {
   const CreateLading = (
     <form className="row">
       <div className="col-md-12">
+        {/*    Mã vận đơn giấy */}
+        <div className="margin-top-10 border-bottom-dash" hidden={!LadingCodeEdit && LadingCode === ""}>
+          <div className='title'>
+            Thông tin cơ bản{" "}
+          </div>
+          <div className="row margin-top-20">
+            <div className="col-md-12 margin-bottom-10">
+              <div className="form-group">
+                <label>
+                  Mã vận đơn <span className="red">*</span>
+                </label>
+                <input
+                  className="form-control"
+                  ref={LadingCodeRef}
+                  value={LadingCode}
+                  {...bindLadingCode}
+                  minLength="0"
+                  maxLength="12"
+                  rows="1"
+                  disabled={!LadingCodeEdit}                  
+                  placeholder='Mã vận đơn: (Ví dụ: GTP34567890)'
+                />
+              </div>
+            </div>
+          </div>
+
+        </div>
         {/*    Thông tin người gửi */}
         <div className="margin-top-10">
           <div className='title'>
@@ -2071,6 +2125,7 @@ export const LadingCreateComponent = () => {
                       onSelected={(item) => {
                         onChooseProvinceFrom(item);
                       }}
+                      version={0}
                       onBlur={(e) => setIsChangePriceMain(1)}
                     />
                   </div>
@@ -2084,6 +2139,7 @@ export const LadingCreateComponent = () => {
                       key="DistrictFrom"
                       onActive={DistrictFrom}
                       ParentID={CityFrom}
+                      type={2}
                       onSelected={(item) => {
                         onChooseDistrictFrom(item);
                       }}
@@ -2109,6 +2165,18 @@ export const LadingCreateComponent = () => {
                     />
                   </div>
                 </div>
+                <div className="col-md-6">
+                    <div className="form-group mt0">
+                      <div className="mb0" style={{fontWeight: "500", fontSize: "14px"}}>
+                        Địa chỉ cũ <span className="red">*</span>
+                      </div>
+                      <SelectOldAddress
+                        DistrictId={DistrictFrom}
+                        onOldAddressId={oldAddressFrom}
+                        onSelected={(item) => setOldAddressFrom(item.value)}
+                      />
+                    </div>
+                  </div>
                 <div className="col-md-12 margin-top-20">
                   <div className="form-group">
                     <label>
@@ -2152,7 +2220,6 @@ export const LadingCreateComponent = () => {
             </div>
           </div>
         </div>
-
         {/* Thông tin người nhận */}
         <div className="">
           <div className="margin-top-10" >
@@ -2219,6 +2286,116 @@ export const LadingCreateComponent = () => {
                       />
                     </div>
                   </div>
+                  <div className="col-md-12 margin-top-20">
+                    <div className="form-group">
+                      <label>Công ty nhận</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        ref={RecipientCompanyRef}
+                        value={RecipientCompany}
+                        {...bindRecipientCompany}
+                        minLength="0"
+                        maxLength="250"
+                      />
+                    </div>
+                  </div>
+                  {/* <div className="col-md-12 mt-2">
+                    <div className="title text-center">ĐỊA CHỈ TRƯỚC SÁT NHẬP</div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group mt0">
+                      <label className="mb0">
+                        Tỉnh thành <span className="red">*</span>
+                      </label>
+                      <SelectCity
+                        onActive={CityTo}
+                        IsLoad={IsLoad}
+                        onSelected={(item) => {
+                          setOldCity({id: item.value, label: item.label});
+                          setOldAddressTo(item.label)
+                        }}
+                        version={1}
+                        onBlur={(e) => setIsChangePriceMain(1)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group mt0">
+                      <label className="mb0">
+                        Quận huyện <span className="red">*</span>
+                      </label>
+                      <SelectDistrict
+                        // key="DistrictTo"
+                        onActive={DistrictTo}
+                        ParentID={oldCity.id}
+                        type={2}
+                        onSelected={(item) => {
+                          setOldDistrict({id: item.value, label: item.label});
+                          setOldAddressTo(item.label + ", " + oldCity.label)
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group mt0">
+                      <label className="mb0">
+                        Phường xã <span className="red">*</span>
+                      </label>
+                      <SelectDistrict
+                        // key="DistrictTo"
+                        onActive={DistrictTo}
+                        ParentID={oldDistrict.id}
+                        type={3}
+                        onSelected={(item) => {
+                          // onChooseDistrictTo(item);
+                          setOldWard({id: item.value, label: item.label});
+                          setOldAddressTo(item.label + ", " + oldDistrict.label + ", " + oldCity.label)
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group StreetToArea mt0">
+                      <div className="mb0" style={{fontWeight: "500", fontSize: "14px"}}>
+                        Số nhà /Đường <span className="red">*</span>
+                      </div>
+                      <input
+                        type="text"
+                        className="form-control"
+                        minLength="0"
+                        maxLength="500"
+                        ref={RecipientStreetRef}
+                        value={RecipientStreet}
+                        {...bindRecipientStreet}
+                        onBlur={(e) => {
+                          changeStreetTo(e.target.value);
+                          setRecipientId(0);
+                          setOldAddressTo(RecipientStreet + ", " + oldWard.label + ", " + oldDistrict.label + ", " + oldCity.label)
+                        }}
+                      />
+                      <div className="ListStreet">
+                        {StreetHtml}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      <div style={{fontWeight: "500", fontSize: "14px"}}>
+                        Địa chỉ nhận trước sát nhập <span className="red">*</span>
+                      </div>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={oldAddressTo}
+                        minLength="0"
+                        maxLength="500"
+                        disabled="disabled"
+                        style={{backgroundColor: "#fafafa"}}
+                      />
+                    </div>
+                  </div> */}
+                  
                   <div className="col-md-6">
                     <div className="form-group mt0">
                       <label className="mb0">
@@ -2230,6 +2407,7 @@ export const LadingCreateComponent = () => {
                         onSelected={(item) => {
                           onChooseProvinceTo(item);
                         }}
+                        version={0}
                         onBlur={(e) => setIsChangePriceMain(1)}
                       />
                     </div>
@@ -2243,6 +2421,7 @@ export const LadingCreateComponent = () => {
                         key="DistrictTo"
                         onActive={DistrictTo}
                         ParentID={CityTo}
+                        type={2}
                         onSelected={(item) => {
                           onChooseDistrictTo(item);
                         }}
@@ -2250,10 +2429,10 @@ export const LadingCreateComponent = () => {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <div className="form-group StreetToArea" style={{ marginTop: "27px" }}>
-                      <label>
+                    <div className="form-group StreetToArea mt0">
+                      <div className="mb0" style={{fontWeight: "500", fontSize: "14px"}}>
                         Số nhà /Đường <span className="red">*</span>
-                      </label>
+                      </div>
                       <input
                         type="text"
                         className="form-control"
@@ -2272,7 +2451,19 @@ export const LadingCreateComponent = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-12 margin-top-20">
+                  <div className="col-md-6">
+                    <div className="form-group mt0">
+                      <div className="mb0" style={{fontWeight: "500", fontSize: "14px"}}>
+                        Địa chỉ cũ <span className="red">*</span>
+                      </div>
+                      <SelectOldAddress
+                        DistrictId={DistrictTo}
+                        onOldAddressId={oldAddressTo}
+                        onSelected={(item) => setOldAddressTo(item.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-12 margin-top-15">
                     <div className="form-group">
                       <label>
                         Địa chỉ nhận <span className="red">*</span>
@@ -2286,23 +2477,11 @@ export const LadingCreateComponent = () => {
                         minLength="0"
                         maxLength="500"
                         disabled="disabled"
+                        style={{backgroundColor: "#fafafa"}}
                       />
                     </div>
                   </div>
-                  <div className="col-md-12 margin-top-20">
-                    <div className="form-group">
-                      <label>Công ty nhận</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        ref={RecipientCompanyRef}
-                        value={RecipientCompany}
-                        {...bindRecipientCompany}
-                        minLength="0"
-                        maxLength="250"
-                      />
-                    </div>
-                  </div>
+                  
                   <div className="col-md-12 text-center">
                     <div
                       className="form-check"
@@ -3173,10 +3352,46 @@ export const LadingCreateComponent = () => {
                 disabled="disabled"
                 type="text"
                 className="form-control"
-                ref={DealineRef}
-                value={Dealine}
-                {...bindDealine}
+                ref={EstTimeRef}
+                value={EstTime}
+                {...bindEstTime}
               />
+            </div>
+          </div>
+          <div className="col-md-6 margin-top-10">
+            <div className="form-group">
+              <label>Bảng giá</label>
+              <div className="input-group mb-2">
+                <input
+                  disabled="disabled"
+                  type="text"
+                  className="form-control"
+                  ref={PriceTableRef}
+                  value={PriceTable}
+                  {...bindPriceTable}
+                />{" "}
+                {/*  <div className="input-group-append">
+                  <div className="input-group-text">đ</div>
+                </div> */}
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6 margin-top-10">
+            <div className="form-group">
+              <label>Giải thích</label>
+              <div className="input-group mb-2">
+                <input
+                  disabled="disabled"
+                  type="text"
+                  className="form-control"
+                  ref={PriceExplainRef}
+                  value={PriceExplain}
+                  {...bindPriceExplain}
+                />{" "}
+                {/*  <div className="input-group-append">
+                  <div className="input-group-text">đ</div>
+                </div> */}
+              </div>
             </div>
           </div>
         </div>

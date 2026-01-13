@@ -5,7 +5,6 @@ const LoadingAlertTemp = ({
     isVisible = false
 }) => {
     const IsLoading = useSelector((state) => state.MainAction.IsLoading)
-    console.log(IsLoading);
     if(IsLoading)
     {
         return (

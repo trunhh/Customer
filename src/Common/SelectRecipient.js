@@ -78,7 +78,7 @@ const SelectRecipientComp = React.forwardRef(({
     list.forEach((element, index) => {
       let option = {
         value: element.Id,
-        label: element.Name + " - " + element.Phone + " - " + element.Address,
+        label: element.Name + " - " + element.Phone + " - " + element.Address + " (" + element.OldAddress + ")",
         obj: element,
       };
       dataOptions.push(option);

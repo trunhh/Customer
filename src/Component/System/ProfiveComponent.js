@@ -5,6 +5,7 @@ import { GoogleLogin } from 'react-google-login';
 import {
   SelectCity,
   SelectDistrict,
+  SelectOldAddress
 } from "../../Common";
 import { Alertsuccess, Alerterror, DecodeString, GetCookie, GetCookieGroup } from "../../Utils";
 
@@ -51,7 +52,9 @@ export const ProfiveComponent = () => {
 
   const [City, setCity] = useState(0);
 
-  const [District, setDistrict] = useState(GetCookie("District"));
+  const [District, setDistrict] = useState(0);
+
+  const [OldAddress, setOldAddress] = useState(0);
 
   const [Avatar, setAvatar] = useState(GetCookie("LinkAvatar"));
   const [FileUpload, setFileUpload] = useState({});
@@ -64,6 +67,8 @@ export const ProfiveComponent = () => {
     if (GetCookieGroup("IsChooseCustomer") === "Fail")
       window.location.href = "/home";
     setCity(GetCookie("City"));
+    setDistrict(GetCookie("District"));
+    setOldAddress(GetCookie("OldAddress"));
   }, []);
 
   const onChooseProvince = (item) => {
@@ -74,6 +79,11 @@ export const ProfiveComponent = () => {
   const onChooseDistrict = (item) => {
     //setDistrictMeno(item);
     setDistrict(item.value);
+  };
+
+  const onChooseOldAddress = (item) => {
+    //setDistrictMeno(item);
+    setOldAddress(item);
   };
   /* clear data on form when insert success */
 
@@ -103,7 +113,11 @@ export const ProfiveComponent = () => {
     } else if (District === 0) {
       Alerterror("Vui lòng chọn Phường xã");
       return;
-    } else {
+    } else if (OldAddress === 0) {
+      Alerterror("Vui lòng chọn Địa chỉ 3 cấp tương ứng");
+      return;
+    }
+    else {
       let params = {
         AppAPIKey: APIKey,
         TokenDevices: TOKEN_DEVICE,
@@ -120,7 +134,8 @@ export const ProfiveComponent = () => {
         BankNumber: BankNumber == null ? "" : BankNumber,
         BankNumberName: BankNumberName == null ? "" : BankNumberName,
         BankName: BankName == null ? "" : BankName,
-        BankBranch: BankBranch == null ? "" : BankBranch
+        BankBranch: BankBranch == null ? "" : BankBranch,
+        OldAddress: OldAddress.value
       };
     const data = await mainAction.API_spCallServer(
       "APIC_spCustomerUpdateInfo_V1",
@@ -141,6 +156,7 @@ export const ProfiveComponent = () => {
       Customer.BankName = BankName;
       Customer.setBankBranch = BankBranch;
       Customer.Company = Company;
+      Customer.OldAddress = OldAddress;
       localStorage.setItem("Customer_LoginData", JSON.stringify(Customer));
     }
     mainAction.LOADING({ IsLoading: false }, dispatch);
@@ -363,18 +379,6 @@ export const ProfiveComponent = () => {
                   />
                 </div>
               </div>
-              <div className="col-md-12 margin-top-10">
-                <div className="form-group">
-                  <label>Địa chỉ <span className="red">(*)</span></label>
-                  <input
-                    type="text"
-                    className="form-control borradius3"
-                    ref={AddressRef}
-                    value={Address}
-                    {...bindAddress}
-                  />
-                </div>
-              </div>
 
               <div className="col-md-6 margin-top-10">
                 <div className="form-group">
@@ -424,7 +428,19 @@ export const ProfiveComponent = () => {
                   />
                 </div>
               </div>
-              <div className="col-md-4">
+              <div className="col-md-12 margin-top-10">
+                <div className="form-group">
+                  <label>Địa chỉ <span className="red">(*)</span></label>
+                  <input
+                    type="text"
+                    className="form-control borradius3"
+                    ref={AddressRef}
+                    value={Address}
+                    {...bindAddress}
+                  />
+                </div>
+              </div>
+              <div className="col-md-6">
                 <div className="form-group mt0">
                   <label className="bmd-label-static">Tỉnh thành <span className="red">(*)</span></label>
                   <SelectCity
@@ -435,7 +451,7 @@ export const ProfiveComponent = () => {
                   />
                 </div>
               </div>
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <div className="form-group mt0">
                   <label className="bmd-label-static">Phường/xã <span className="red">(*)</span></label>
                   <SelectDistrict
@@ -443,6 +459,18 @@ export const ProfiveComponent = () => {
                     ParentID={City}
                     onSelected={(item) => {
                       onChooseDistrict(item);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="col-md-12">
+                <div className="form-group mt0">
+                  <label className="bmd-label-static">Địa chỉ 3 cấp tương ứng <span className="red">(*)</span></label>
+                  <SelectOldAddress
+                    DistrictId={District}
+                    onOldAddressId={OldAddress}
+                    onSelected={(item) => {
+                      onChooseOldAddress(item);
                     }}
                   />
                 </div>

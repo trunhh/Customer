@@ -12,3 +12,4 @@ export * from './LadingDetail';
 export * from './FormManagerAddress';
 export * from './NoCustomer';
 export * from './FormDataInCustomer';
+export * from './SelectOldAddress';
